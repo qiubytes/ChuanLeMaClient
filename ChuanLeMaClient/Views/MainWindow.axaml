@@ -1,0 +1,107 @@
+﻿<Window xmlns="https://github.com/avaloniaui"
+		xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+		xmlns:vm="using:ChuanLeMaClient.ViewModels"
+		xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+		xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+		mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+		x:Class="ChuanLeMaClient.Views.MainWindow"
+		x:DataType="vm:MainWindowViewModel"
+		xmlns:atom="https://atomui.net"
+		xmlns:antdicons="https://atomui.net/icons/antdesign"
+		FontFamily="Microsoft YaHei"
+		Icon="/Assets/avalonia-logo.ico"
+		Title="ChuanLeMaClient">
+
+	<Design.DataContext>
+		<!-- This only sets the DataContext for the previewer in an IDE,
+		to set the actual DataContext for runtime, set the DataContext property in code (look at App.axaml.cs) -->
+		<vm:MainWindowViewModel/>
+	</Design.DataContext>
+
+	<!--<TextBlock Text="{Binding Greeting}" HorizontalAlignment="Center" VerticalAlignment="Center"/>-->
+	<!--	<StackPanel>
+	<TextBlock Text="Welcome to ChuanLeMaClient!" HorizontalAlignment="Center" Margin="0,20,0,20" FontSize="20"/>
+	<Button Content="Click Me" Command="{Binding ClickMeCommand}" Width="100" Height="30" HorizontalAlignment="Center"/>
+	<DatePicker DayFormat="ddd dd"/>
+	<TimePicker ClockIdentifier="24HourClock"
+	MinuteIncrement="20"/>
+	<atom:ProgressBar Value="50" Minimum="0" Maximum="100"
+	HorizontalAlignment="Center"
+	Width="400"/>
+	<atom:CircleProgress Value="40" Minimum="0" Maximum="100"
+	HorizontalAlignment="Center"/>
+	<StackPanel Orientation="Horizontal" Spacing="10" HorizontalAlignment="Center">
+	<atom:Button   >Sub</atom:Button>
+	<atom:Button Command="{Binding ClickSubCommand}"  >Add</atom:Button>
+	</StackPanel>
+	<atom:DatePicker IsNeedConfirm="False" Watermark="Select date"  />
+	<atom:TimePicker Watermark="Select time" IsNeedConfirm="False" IsShowNow="True" ClockIdentifier="HourClock24" />
+	</StackPanel>-->
+	<Grid>
+		<Grid.RowDefinitions>
+			<RowDefinition Height="2*"/>
+			<RowDefinition Height="5*"/>
+		</Grid.RowDefinitions>
+		<atom:Card Header="账号信息" SizeType="Large" Grid.Row="0" >
+		<StackPanel Orientation="Vertical" Spacing="3">
+			<atom:TextBlock>Card content</atom:TextBlock>
+			<atom:TextBlock>Card content</atom:TextBlock>
+			<atom:TextBlock>Card content</atom:TextBlock>
+		</StackPanel>
+		</atom:Card>
+		<atom:Card Header="文件信息" SizeType="Large"  Grid.Row="1" >
+		<Grid>
+			<Grid.ColumnDefinitions>
+				<ColumnDefinition Width="1*"/>
+				<ColumnDefinition Width="1*"/>
+			</Grid.ColumnDefinitions>
+			<atom:DataGrid x:Name="BasicCaseGrid"
+						   IsHideOnSinglePage="True"
+						   Grid.Column="0"
+						   ItemsSource="{Binding DataList}"
+						   >
+				<atom:DataGrid.Columns>
+					<atom:DataGridTemplateColumn Header="名称">
+						<atom:DataGridTemplateColumn.CellTemplate>
+							<DataTemplate>
+								<atom:HyperLinkTextBlock Text="{Binding Name}" />
+							</DataTemplate>
+						</atom:DataGridTemplateColumn.CellTemplate>
+					</atom:DataGridTemplateColumn>
+			 
+					<atom:DataGridTemplateColumn Header="类型">
+						<atom:DataGridTemplateColumn.CellTemplate>
+							<DataTemplate>
+								<ItemsControl ItemsSource="{Binding Tags}">
+									<ItemsControl.ItemsPanel>
+										<ItemsPanelTemplate>
+											<StackPanel Orientation="Horizontal" Spacing="5" />
+										</ItemsPanelTemplate>
+									</ItemsControl.ItemsPanel>
+									<ItemsControl.ItemTemplate>
+										<DataTemplate>
+											<atom:Tag TagText="{Binding Name}" TagColor="{Binding Color}"></atom:Tag>
+										</DataTemplate>
+									</ItemsControl.ItemTemplate>
+								</ItemsControl>
+							</DataTemplate>
+						</atom:DataGridTemplateColumn.CellTemplate>
+					</atom:DataGridTemplateColumn>
+					<atom:DataGridTextColumn Header="大小" Binding="{Binding Size}" CanUserResize="True" />
+
+					<atom:DataGridTemplateColumn Header="Action">
+						<atom:DataGridTemplateColumn.CellTemplate>
+							<DataTemplate>
+								<StackPanel Orientation="Horizontal" Spacing="15">
+									<atom:HyperLinkTextBlock Text="上传" /> 
+									<atom:HyperLinkTextBlock Text="删除" />
+								</StackPanel>
+							</DataTemplate>
+						</atom:DataGridTemplateColumn.CellTemplate>
+					</atom:DataGridTemplateColumn>
+				</atom:DataGrid.Columns>
+			</atom:DataGrid>
+		</Grid>
+		</atom:Card>
+	</Grid>
+</Window>
