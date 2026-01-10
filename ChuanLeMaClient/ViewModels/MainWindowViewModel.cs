@@ -19,7 +19,7 @@ namespace ChuanLeMaClient.ViewModels
     {
         private WindowNotificationManager? _basicManager;
         [ObservableProperty]
-        public ObservableCollection<DataGridBaseInfo> dataList=new();
+        public ObservableCollection<DataGridBaseInfo> dataList = new();
         public void SetNotificationManager(WindowNotificationManager manager)
         {
             _basicManager = manager;
@@ -27,7 +27,7 @@ namespace ChuanLeMaClient.ViewModels
                [
                    new DataGridBaseInfo
                     {
-                        Key   = "1", Name = "John Brown", Size = 32,  
+                        Key   = "1", Name = "John Brown", Size = 32,
                         Tags =
                         [
                            new TagInfo { Name = "目录", Color = "geekblue" }
@@ -35,7 +35,7 @@ namespace ChuanLeMaClient.ViewModels
                     },
                     new DataGridBaseInfo
                     {
-                        Key   = "2", Name = "Jim Green", Size = 42,  
+                        Key   = "2", Name = "Jim Green", Size = 42,
                         Tags =
                         [
                             new TagInfo { Name = "目录", Color = "geekblue" }
@@ -43,7 +43,7 @@ namespace ChuanLeMaClient.ViewModels
                     },
                     new DataGridBaseInfo
                     {
-                        Key   = "3", Name = "Joe Black", Size = 32, 
+                        Key   = "3", Name = "Joe Black", Size = 32,
                         Tags =
                         [
                             new TagInfo { Name = "文件", Color    = "green" },
@@ -84,9 +84,17 @@ namespace ChuanLeMaClient.ViewModels
         public void ClickSub()
         {
             _basicManager?.Show(new Notification(
-            "Notification Title",
-            "Hello, AtomUI/Avalonia!"
-        ));
+                                    "Notification Title",
+                                    "Hello, AtomUI/Avalonia!"
+                                ));
+        }
+        [RelayCommand]
+        public void UploadLink(DataGridBaseInfo info)
+        {
+            _basicManager?.Show(new Notification(
+                                 "温馨提示",
+                                 $"上传成功!{info.Name}"
+                             ));
         }
     }
 }

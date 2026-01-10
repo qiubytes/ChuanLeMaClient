@@ -1,6 +1,7 @@
 ﻿<Window xmlns="https://github.com/avaloniaui"
 		xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
 		xmlns:vm="using:ChuanLeMaClient.ViewModels"
+		xmlns:v="using:ChuanLeMaClient.Views"
 		xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
 		xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
 		mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
@@ -10,6 +11,7 @@
 		xmlns:antdicons="https://atomui.net/icons/antdesign"
 		FontFamily="Microsoft YaHei"
 		Icon="/Assets/avalonia-logo.ico"
+		Name="MainWindowControl"
 		Title="ChuanLeMaClient">
 
 	<Design.DataContext>
@@ -43,65 +45,68 @@
 			<RowDefinition Height="5*"/>
 		</Grid.RowDefinitions>
 		<atom:Card Header="账号信息" SizeType="Large" Grid.Row="0" >
-		<StackPanel Orientation="Vertical" Spacing="3">
-			<atom:TextBlock>Card content</atom:TextBlock>
-			<atom:TextBlock>Card content</atom:TextBlock>
-			<atom:TextBlock>Card content</atom:TextBlock>
-		</StackPanel>
+			<StackPanel Orientation="Vertical" Spacing="3">
+				<atom:TextBlock>Card content</atom:TextBlock>
+				<atom:TextBlock>Card content</atom:TextBlock>
+				<atom:TextBlock>Card content</atom:TextBlock>
+			</StackPanel>
 		</atom:Card>
 		<atom:Card Header="文件信息" SizeType="Large"  Grid.Row="1" >
-		<Grid>
-			<Grid.ColumnDefinitions>
-				<ColumnDefinition Width="1*"/>
-				<ColumnDefinition Width="1*"/>
-			</Grid.ColumnDefinitions>
-			<atom:DataGrid x:Name="BasicCaseGrid"
-						   IsHideOnSinglePage="True"
-						   Grid.Column="0"
-						   ItemsSource="{Binding DataList}"
-						   >
-				<atom:DataGrid.Columns>
-					<atom:DataGridTemplateColumn Header="名称">
-						<atom:DataGridTemplateColumn.CellTemplate>
-							<DataTemplate>
-								<atom:HyperLinkTextBlock Text="{Binding Name}" />
-							</DataTemplate>
-						</atom:DataGridTemplateColumn.CellTemplate>
-					</atom:DataGridTemplateColumn>
-			 
-					<atom:DataGridTemplateColumn Header="类型">
-						<atom:DataGridTemplateColumn.CellTemplate>
-							<DataTemplate>
-								<ItemsControl ItemsSource="{Binding Tags}">
-									<ItemsControl.ItemsPanel>
-										<ItemsPanelTemplate>
-											<StackPanel Orientation="Horizontal" Spacing="5" />
-										</ItemsPanelTemplate>
-									</ItemsControl.ItemsPanel>
-									<ItemsControl.ItemTemplate>
-										<DataTemplate>
-											<atom:Tag TagText="{Binding Name}" TagColor="{Binding Color}"></atom:Tag>
-										</DataTemplate>
-									</ItemsControl.ItemTemplate>
-								</ItemsControl>
-							</DataTemplate>
-						</atom:DataGridTemplateColumn.CellTemplate>
-					</atom:DataGridTemplateColumn>
-					<atom:DataGridTextColumn Header="大小" Binding="{Binding Size}" CanUserResize="True" />
+			<Grid>
+				<Grid.ColumnDefinitions>
+					<ColumnDefinition Width="1*"/>
+					<ColumnDefinition Width="1*"/>
+				</Grid.ColumnDefinitions>
+				<atom:DataGrid x:Name="BasicCaseGrid"
+							   IsHideOnSinglePage="True"
+							   Grid.Column="0"
+							   ItemsSource="{Binding DataList}"
+							   >
+					<atom:DataGrid.Columns>
+						<atom:DataGridTemplateColumn Header="名称">
+							<atom:DataGridTemplateColumn.CellTemplate>
+								<DataTemplate>
+									<atom:HyperLinkTextBlock Text="{Binding Name}" />
+								</DataTemplate>
+							</atom:DataGridTemplateColumn.CellTemplate>
+						</atom:DataGridTemplateColumn>
 
-					<atom:DataGridTemplateColumn Header="Action">
-						<atom:DataGridTemplateColumn.CellTemplate>
-							<DataTemplate>
-								<StackPanel Orientation="Horizontal" Spacing="15">
-									<atom:HyperLinkTextBlock Text="上传" /> 
-									<atom:HyperLinkTextBlock Text="删除" />
-								</StackPanel>
-							</DataTemplate>
-						</atom:DataGridTemplateColumn.CellTemplate>
-					</atom:DataGridTemplateColumn>
-				</atom:DataGrid.Columns>
-			</atom:DataGrid>
-		</Grid>
+						<atom:DataGridTemplateColumn Header="类型">
+							<atom:DataGridTemplateColumn.CellTemplate>
+								<DataTemplate>
+									<ItemsControl ItemsSource="{Binding Tags}">
+										<ItemsControl.ItemsPanel>
+											<ItemsPanelTemplate>
+												<StackPanel Orientation="Horizontal" Spacing="5" />
+											</ItemsPanelTemplate>
+										</ItemsControl.ItemsPanel>
+										<ItemsControl.ItemTemplate>
+											<DataTemplate>
+												<atom:Tag TagText="{Binding Name}" TagColor="{Binding Color}"></atom:Tag>
+											</DataTemplate>
+										</ItemsControl.ItemTemplate>
+									</ItemsControl>
+								</DataTemplate>
+							</atom:DataGridTemplateColumn.CellTemplate>
+						</atom:DataGridTemplateColumn>
+						<atom:DataGridTextColumn Header="大小" Binding="{Binding Size}" CanUserResize="True" />
+
+						<atom:DataGridTemplateColumn Header="Action">
+							<atom:DataGridTemplateColumn.CellTemplate>
+								<DataTemplate>
+									<StackPanel Orientation="Horizontal" Spacing="15">
+										<atom:HyperLinkTextBlock Text="上传"
+													 Command="{Binding DataContext.UploadLinkCommand,
+													 ElementName=MainWindowControl}}"
+													 CommandParameter="{Binding}" />
+										<atom:HyperLinkTextBlock Text="删除" />
+									</StackPanel>
+								</DataTemplate>
+							</atom:DataGridTemplateColumn.CellTemplate>
+						</atom:DataGridTemplateColumn>
+					</atom:DataGrid.Columns>
+				</atom:DataGrid>
+			</Grid>
 		</atom:Card>
 	</Grid>
 </Window>
