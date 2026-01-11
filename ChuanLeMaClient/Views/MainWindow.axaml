@@ -1,7 +1,6 @@
 ﻿<Window xmlns="https://github.com/avaloniaui"
 		xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-		xmlns:vm="using:ChuanLeMaClient.ViewModels"
-		xmlns:v="using:ChuanLeMaClient.Views"
+		xmlns:vm="using:ChuanLeMaClient.ViewModels" 
 		xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
 		xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
 		mc:Ignorable="d" d:DesignWidth="900" d:DesignHeight="650"
@@ -145,7 +144,7 @@
 											<atom:HyperLinkTextBlock Text="打开"  IsVisible="{Binding Tags, Converter={StaticResource FolderOpenVisibility}}" />
 											<atom:HyperLinkTextBlock Text="上传"
 																	 Command="{Binding DataContext.UploadLinkCommand,
-																	 ElementName=MainWindowControl}}"
+																	 ElementName=MainWindowControl}"
 																	 CommandParameter="{Binding}" />
 											<atom:HyperLinkTextBlock Text="删除" />
 										</StackPanel>

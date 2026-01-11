@@ -22,16 +22,17 @@ namespace ChuanLeMaClient.ViewModels
     public partial class MainWindowViewModel : ViewModelBase
     {
         private WindowNotificationManager? _basicManager;
+
         /// <summary>
         /// 本地文件目录列表
         /// </summary>
-        [ObservableProperty]
-        public ObservableCollection<FolderFileDataModel> localFolderDataList = new();
+        [ObservableProperty] public ObservableCollection<FolderFileDataModel> localFolderDataList = new();
+
         /// <summary>
         /// 本地工作目录
         /// </summary>
-        [ObservableProperty]
-        public string localWorkPath;
+        [ObservableProperty] public string localWorkPath;
+
         /// <summary>
         /// 由窗口调用 传入通知管理器
         /// </summary>
@@ -68,8 +69,29 @@ namespace ChuanLeMaClient.ViewModels
             //   ];
             //LocalFolderDataList.AddRange(items);
         }
+
         private ITestService _testService;
         private readonly ILocalFolderFileService _localFolderFileService;
+
+      
+        public MainWindowViewModel()
+        {
+            // 总是检查是否在设计模式下
+            if (Design.IsDesignMode)
+            { 
+            }
+            else
+            {
+                // 如果没有通过依赖注入调用，则抛出异常
+                throw new InvalidOperationException(
+                    "这个 ViewModel 应该通过依赖注入创建");
+            }
+        }
+        /// <summary>
+        /// autofac 默认使用 可解析参数数量最多的构造函数
+        /// </summary>
+        /// <param name="testService"></param>
+        /// <param name="localFolderFileService"></param>
         public MainWindowViewModel(ITestService testService, ILocalFolderFileService localFolderFileService)
         {
             _testService = testService;
@@ -93,44 +115,49 @@ namespace ChuanLeMaClient.ViewModels
             //初始化本地文件列表
             InitLocalFolderFiles();
         }
+
         private void InitLocalFolderFiles()
         {
-            LocalWorkPath= Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+            LocalWorkPath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
             var list = _localFolderFileService.GetAllFoldersFiles(LocalWorkPath);
             LocalFolderDataList.Clear();
             LocalFolderDataList.AddRange(list);
-        } 
+        }
+
         [RelayCommand]
         public async Task ClickMe()
         {
             var box = MessageBoxManager
-    .GetMessageBoxStandard("Caption", "Are you sure you would like to delete appender_replace_page_1?",
-        ButtonEnum.Ok);
+                .GetMessageBoxStandard("Caption", "Are you sure you would like to delete appender_replace_page_1?",
+                    ButtonEnum.Ok);
             var result = await box.ShowAsync();
         }
+
         [RelayCommand]
         public void ClickSub()
         {
             _basicManager?.Show(new Notification(
-                                    "Notification Title",
-                                    "Hello, AtomUI/Avalonia!"
-                                ));
+                "Notification Title",
+                "Hello, AtomUI/Avalonia!"
+            ));
         }
+
         [RelayCommand]
         public void UploadLink(FolderFileDataModel info)
         {
             _basicManager?.Show(new Notification(
-                                 "温馨提示",
-                                 $"上传成功!{info.Name}"
-                             ));
+                "温馨提示",
+                $"上传成功!{info.Name}"
+            ));
         }
+
         [RelayCommand]
         public void Login()
         {
             _basicManager?.Show(new Notification(
-                                 "温馨提示",
-                                 $"登录失败,账号或密码错误！"
-                             ));
+                "温馨提示",
+                $"登录失败,账号或密码错误！"
+            ));
             _testService.Hello();
         }
     }
