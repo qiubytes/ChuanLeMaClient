@@ -25,7 +25,7 @@ namespace ChuanLeMaClient.Views
                 AtomUI.Desktop.Controls.WindowNotificationManager _notificationManager = new AtomUI.Desktop.Controls.WindowNotificationManager(this)
                 {
                     MaxItems = 3,
-                    Position = AtomUI.Desktop.Controls.NotificationPosition.TopLeft
+                    Position = AtomUI.Desktop.Controls.NotificationPosition.TopRight
                 };
                 vm.SetNotificationManager(_notificationManager);
             }

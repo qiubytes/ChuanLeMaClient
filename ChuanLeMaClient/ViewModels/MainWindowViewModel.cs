@@ -97,5 +97,13 @@ namespace ChuanLeMaClient.ViewModels
                                  $"上传成功!{info.Name}"
                              ));
         }
+        [RelayCommand]
+        public void Login()
+        {
+            _basicManager?.Show(new Notification(
+                                 "温馨提示",
+                                 $"登录失败,账号或密码错误！"
+                             ));
+        }
     }
 }

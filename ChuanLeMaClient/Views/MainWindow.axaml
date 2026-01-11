@@ -10,6 +10,7 @@
 		xmlns:atom="https://atomui.net"
 		xmlns:antdicons="https://atomui.net/icons/antdesign"
 		xmlns:converters="clr-namespace:ChuanLeMaClient.Converters"
+		WindowStartupLocation="CenterScreen"
 		FontFamily="Microsoft YaHei"
 		Icon="/Assets/avalonia-logo.ico"
 		Name="MainWindowControl"
@@ -67,8 +68,10 @@
 						<atom:LineEdit Watermark="请输入密码"  PasswordChar="*" HorizontalAlignment="Stretch" Width="150"/>
 					</StackPanel>
 				</atom:Col>
-				<atom:Col>
-					<atom:Button ButtonType="Primary"    Icon="{antdicons:AntDesignIconProvider Kind=LoginOutlined}"   HorizontalAlignment="Left" >登录</atom:Button>
+				<atom:Col Margin="15,0,0,0">
+					<atom:Button ButtonType="Primary"    Icon="{antdicons:AntDesignIconProvider Kind=LoginOutlined}"
+								 Command="{Binding LoginCommand}"
+								 HorizontalAlignment="Left" >登录</atom:Button>
 				</atom:Col>
 			</atom:Row>
 			<!--<StackPanel Orientation="Vertical" Spacing="3">
