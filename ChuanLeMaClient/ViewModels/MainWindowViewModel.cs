@@ -4,6 +4,8 @@ using Avalonia.Controls;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Threading;
 using ChuanLeMaClient.Models;
+using ChuanLeMaClient.Services.Implement;
+using ChuanLeMaClient.Services.Inteface;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using DynamicData;
@@ -54,8 +56,10 @@ namespace ChuanLeMaClient.ViewModels
                ];
             DataList.AddRange(items);
         }
-        public MainWindowViewModel()
+        private ITestService _testService;
+        public MainWindowViewModel(ITestService testService)
         {
+            _testService = testService;
             // 延迟到UI线程空闲时初始化
             //Dispatcher.UIThread.Post(() =>
             //{
@@ -79,7 +83,7 @@ namespace ChuanLeMaClient.ViewModels
             var box = MessageBoxManager
     .GetMessageBoxStandard("Caption", "Are you sure you would like to delete appender_replace_page_1?",
         ButtonEnum.Ok);
-            var result = await box.ShowAsync(); 
+            var result = await box.ShowAsync();
         }
         [RelayCommand]
         public void ClickSub()
@@ -104,6 +108,7 @@ namespace ChuanLeMaClient.ViewModels
                                  "温馨提示",
                                  $"登录失败,账号或密码错误！"
                              ));
+            _testService.Hello();
         }
     }
 }
