@@ -6,11 +6,14 @@ using System.Threading.Tasks;
 
 namespace ChuanLeMaClient.Models
 {
-    public class DataGridBaseInfo
+    public class FolderFileDataModel
     {
-        public string Key { get; set; } = string.Empty;
         public string Name { get; set; } = string.Empty;
-        public int Size { get; set; }  
+        public int Size { get; set; }
+        /// <summary>
+        /// 是否是文件夹 否则是文件
+        /// </summary>
+        public bool IsFolder { get; set; }
         public List<TagInfo> Tags { get; set; } = new();
         public string Description { get; set; } = string.Empty;
     }

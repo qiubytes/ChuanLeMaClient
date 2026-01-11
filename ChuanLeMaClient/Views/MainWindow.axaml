@@ -94,13 +94,12 @@
 							<ColumnDefinition Width="*"/>
 						</Grid.ColumnDefinitions>
 						<Label Content="工作目录"   Grid.Column="0"  />
-						<atom:LineEdit  Grid.Column="1"   HorizontalAlignment="Stretch" InnerLeftContent="{antdicons:AntDesignIconProvider Kind=FolderFilled}"/>
+						<atom:LineEdit  Grid.Column="1" Text="{Binding LocalWorkPath }"   HorizontalAlignment="Stretch" InnerLeftContent="{antdicons:AntDesignIconProvider Kind=FolderFilled}"/>
 
 					</Grid>
 					<atom:DataGrid x:Name="BasicCaseGrid"
-								   IsHideOnSinglePage="True"
-
-								   ItemsSource="{Binding DataList}"
+								   IsHideOnSinglePage="True" 
+								   ItemsSource="{Binding LocalFolderDataList}" 
 								   >
 						<atom:DataGrid.Columns>
 							<atom:DataGridTemplateColumn Header="名称">
@@ -111,7 +110,7 @@
 								</atom:DataGridTemplateColumn.CellTemplate>
 							</atom:DataGridTemplateColumn>
 
-							<atom:DataGridTemplateColumn Header="类型">
+							<atom:DataGridTemplateColumn Header="类型" >
 								<atom:DataGridTemplateColumn.CellTemplate>
 									<DataTemplate>
 										<ItemsControl ItemsSource="{Binding Tags}">

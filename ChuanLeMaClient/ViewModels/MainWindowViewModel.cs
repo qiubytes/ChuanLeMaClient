@@ -12,6 +12,7 @@ using DynamicData;
 using MsBox.Avalonia;
 using MsBox.Avalonia.Enums;
 using Splat;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Threading.Tasks;
@@ -21,32 +22,44 @@ namespace ChuanLeMaClient.ViewModels
     public partial class MainWindowViewModel : ViewModelBase
     {
         private WindowNotificationManager? _basicManager;
+        /// <summary>
+        /// 本地文件目录列表
+        /// </summary>
         [ObservableProperty]
-        public ObservableCollection<DataGridBaseInfo> dataList = new();
+        public ObservableCollection<FolderFileDataModel> localFolderDataList = new();
+        /// <summary>
+        /// 本地工作目录
+        /// </summary>
+        [ObservableProperty]
+        public string localWorkPath;
+        /// <summary>
+        /// 由窗口调用 传入通知管理器
+        /// </summary>
+        /// <param name="manager"></param>
         public void SetNotificationManager(WindowNotificationManager manager)
         {
             _basicManager = manager;
-            List<DataGridBaseInfo> items =
+            List<FolderFileDataModel> items =
                [
-                   new DataGridBaseInfo
+                   new FolderFileDataModel
                     {
-                        Key   = "1", Name = "John Brown", Size = 32,
+                         Name = "John Brown", Size = 32,
                         Tags =
                         [
                            new TagInfo { Name = "目录", Color = "geekblue" }
                         ]
                     },
-                    new DataGridBaseInfo
+                    new FolderFileDataModel
                     {
-                        Key   = "2", Name = "Jim Green", Size = 42,
+                         Name = "Jim Green", Size = 42,
                         Tags =
                         [
                             new TagInfo { Name = "目录", Color = "geekblue" }
                         ]
                     },
-                    new DataGridBaseInfo
+                    new FolderFileDataModel
                     {
-                        Key   = "3", Name = "Joe Black", Size = 32,
+                        Name = "Joe Black", Size = 32,
                         Tags =
                         [
                             new TagInfo { Name = "文件", Color    = "green" },
@@ -54,12 +67,14 @@ namespace ChuanLeMaClient.ViewModels
                         ]
                     }
                ];
-            DataList.AddRange(items);
+            LocalFolderDataList.AddRange(items);
         }
         private ITestService _testService;
-        public MainWindowViewModel(ITestService testService)
+        private readonly ILocalFolderFileService _localFolderFileService;
+        public MainWindowViewModel(ITestService testService, ILocalFolderFileService localFolderFileService)
         {
             _testService = testService;
+            _localFolderFileService = localFolderFileService;
             // 延迟到UI线程空闲时初始化
             //Dispatcher.UIThread.Post(() =>
             //{
@@ -75,8 +90,17 @@ namespace ChuanLeMaClient.ViewModels
             //        };
             //    }
             //}, DispatcherPriority.Background);
+
+            //初始化本地文件列表
+            InitLocalFolderFiles();
         }
-        public string Greeting { get; } = "Welcome to Avalonia!";
+        private void InitLocalFolderFiles()
+        {
+            LocalWorkPath= Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+            var list = _localFolderFileService.GetAllFoldersFiles(LocalWorkPath);
+            LocalFolderDataList.Clear();
+            LocalFolderDataList.AddRange(list);
+        } 
         [RelayCommand]
         public async Task ClickMe()
         {
@@ -94,7 +118,7 @@ namespace ChuanLeMaClient.ViewModels
                                 ));
         }
         [RelayCommand]
-        public void UploadLink(DataGridBaseInfo info)
+        public void UploadLink(FolderFileDataModel info)
         {
             _basicManager?.Show(new Notification(
                                  "温馨提示",
