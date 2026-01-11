@@ -14,6 +14,7 @@
 		Icon="/Assets/avalonia-logo.ico"
 		Name="MainWindowControl"
 		Title="传了吗">
+	<!-- 声明资源、转换器 -->
 	<Window.Resources>
 		<converters:FolderOpenVisibilityConverter x:Key="FolderOpenVisibility"/>
 	</Window.Resources>
