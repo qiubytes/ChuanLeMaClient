@@ -39,35 +39,34 @@ namespace ChuanLeMaClient.ViewModels
         public void SetNotificationManager(WindowNotificationManager manager)
         {
             _basicManager = manager;
-            List<FolderFileDataModel> items =
-               [
-                   new FolderFileDataModel
-                    {
-                         Name = "John Brown", Size = 32,
-                        Tags =
-                        [
-                           new TagInfo { Name = "目录", Color = "geekblue" }
-                        ]
-                    },
-                    new FolderFileDataModel
-                    {
-                         Name = "Jim Green", Size = 42,
-                        Tags =
-                        [
-                            new TagInfo { Name = "目录", Color = "geekblue" }
-                        ]
-                    },
-                    new FolderFileDataModel
-                    {
-                        Name = "Joe Black", Size = 32,
-                        Tags =
-                        [
-                            new TagInfo { Name = "文件", Color    = "green" },
-                            new TagInfo { Name = "TEACHER", Color = "geekblue" }
-                        ]
-                    }
-               ];
-            LocalFolderDataList.AddRange(items);
+            //List<FolderFileDataModel> items =
+            //   [
+            //       new FolderFileDataModel
+            //        {
+            //             Name = "John Brown", Size = 32,
+            //            Tags =
+            //            [
+            //               new TagInfo { Name = "目录", Color = "geekblue" }
+            //            ]
+            //        },
+            //        new FolderFileDataModel
+            //        {
+            //             Name = "Jim Green", Size = 42,
+            //            Tags =
+            //            [
+            //                new TagInfo { Name = "目录", Color = "geekblue" }
+            //            ]
+            //        },
+            //        new FolderFileDataModel
+            //        {
+            //            Name = "Joe Black", Size = 32,
+            //            Tags =
+            //            [
+            //                new TagInfo { Name = "文件", Color    = "green" }
+            //            ]
+            //        }
+            //   ];
+            //LocalFolderDataList.AddRange(items);
         }
         private ITestService _testService;
         private readonly ILocalFolderFileService _localFolderFileService;

@@ -35,7 +35,7 @@ namespace ChuanLeMaClient.Services.Implement
                     Name = file.Name,
                     Size = (int)file.Length,
                     IsFolder = false,
-                    Tags = new List<TagInfo>() { new TagInfo { Name = "目录", Color = "green" } }
+                    Tags = new List<TagInfo>() { new TagInfo { Name = "文件", Color = "geekblue" } } 
                 });
             }
             foreach (DirectoryInfo dir in dirs)
@@ -44,11 +44,11 @@ namespace ChuanLeMaClient.Services.Implement
                 {
                     Name = dir.Name,
                     Size = 0,
-                    IsFolder = true, 
-                    Tags = new List<TagInfo>() { new TagInfo { Name = "文件", Color = "geekblue" } }
+                    IsFolder = true,
+                    Tags = new List<TagInfo>() { new TagInfo { Name = "目录", Color = "green" } }
                 });
             }
-            return folderFileDataModels.OrderBy(o => o.IsFolder).ToList();
+            return folderFileDataModels.OrderByDescending(o => o.IsFolder).ToList();
         }
     }
 }
