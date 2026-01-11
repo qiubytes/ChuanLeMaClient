@@ -9,6 +9,7 @@
 		xmlns:atom="https://atomui.net"
 		xmlns:antdicons="https://atomui.net/icons/antdesign"
 		xmlns:converters="clr-namespace:ChuanLeMaClient.Converters"
+		xmlns:behaviors="clr-namespace:ChuanLeMaClient.Behaviours"
 		WindowStartupLocation="CenterScreen"
 		FontFamily="Microsoft YaHei"
 		Icon="/Assets/avalonia-logo.ico"
@@ -111,9 +112,24 @@
 								   HorizontalAlignment="Stretch"
 								   ItemsSource="{Binding LocalFolderDataList}"
 								   HorizontalScrollBarVisibility="Visible"
-								   ColumnHeaderHeight="50" 
-								   Grid.Row="1"
-								   >
+								   ColumnHeaderHeight="50"
+								   Grid.Row="1" 
+								   > 
+						<!--
+						behaviors:DataGridRightClickBehavior.RightClickCommand="{Binding RightClickCommand}"
+						behaviors:DataGridRightClickBehavior.RightClickCommandParameter="{Binding SelectedItem}"
+
+						<atom:DataGrid.ContextMenu>
+						<atom:ContextMenu>
+						<atom:MenuItem Header="上传"
+						Icon="{antdicons:AntDesignIconProvider Kind=UploadOutlined}"
+						Command="{Binding UploadLinkCommand}"
+						CommandParameter="{Binding SelectedItem,ElementName=BasicCaseGrid}"
+						/>
+						<atom:MenuItem Header="删除" InputGesture="Ctrl+D"
+						Icon="{antdicons:AntDesignIconProvider Kind=DeleteOutlined}" />
+						</atom:ContextMenu>
+						</atom:DataGrid.ContextMenu>-->
 						<atom:DataGrid.Columns>
 							<atom:DataGridTemplateColumn Header="名称" Width="3*">
 								<atom:DataGridTemplateColumn.CellTemplate>
@@ -147,6 +163,15 @@
 								<atom:DataGridTemplateColumn.CellTemplate>
 									<DataTemplate>
 										<StackPanel Orientation="Horizontal" Spacing="15">
+											<StackPanel.ContextMenu>
+												<ContextMenu>
+													<MenuItem Header="上传"
+															  Command="{Binding DataContext.UploadLinkCommand,
+															  ElementName=MainWindowControl}"
+															  CommandParameter="{Binding}" /> 
+												</ContextMenu>
+											</StackPanel.ContextMenu>
+
 											<atom:HyperLinkTextBlock Text="打开"
 																	 Command="{Binding DataContext.OpenFolder,
 																	 ElementName=MainWindowControl}"
@@ -157,6 +182,7 @@
 																	 ElementName=MainWindowControl}"
 																	 CommandParameter="{Binding}" />
 											<atom:HyperLinkTextBlock Text="删除" />
+											
 										</StackPanel>
 									</DataTemplate>
 								</atom:DataGridTemplateColumn.CellTemplate>

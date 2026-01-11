@@ -32,7 +32,7 @@ namespace ChuanLeMaClient.ViewModels
         /// 本地工作目录
         /// </summary>
         [ObservableProperty] public string localWorkPath;
-
+    
         /// <summary>
         /// 由窗口调用 传入通知管理器
         /// </summary>
@@ -178,5 +178,6 @@ namespace ChuanLeMaClient.ViewModels
             ));
             _testService.Hello();
         }
+       
     }
 }
