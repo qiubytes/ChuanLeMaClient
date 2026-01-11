@@ -1,6 +1,6 @@
 ﻿<Window xmlns="https://github.com/avaloniaui"
 		xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-		xmlns:vm="using:ChuanLeMaClient.ViewModels" 
+		xmlns:vm="using:ChuanLeMaClient.ViewModels"
 		xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
 		xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
 		mc:Ignorable="d" d:DesignWidth="900" d:DesignHeight="650"
@@ -17,6 +17,7 @@
 	<!-- 声明资源、转换器 -->
 	<Window.Resources>
 		<converters:FolderOpenVisibilityConverter x:Key="FolderOpenVisibility"/>
+		<converters:FileSizeConverter x:Key="FileSizeConverter"/>
 	</Window.Resources>
 	<Design.DataContext>
 		<!-- This only sets the DataContext for the previewer in an IDE,
@@ -96,20 +97,25 @@
 						<Grid.ColumnDefinitions>
 							<ColumnDefinition Width="Auto"/>
 							<ColumnDefinition Width="*"/>
+							<ColumnDefinition Width="Auto"/>
+							<ColumnDefinition Width="Auto"/>
 						</Grid.ColumnDefinitions>
 						<Label Content="工作目录"   Grid.Column="0"  />
 						<atom:LineEdit  Grid.Column="1" Text="{Binding LocalWorkPath }"   HorizontalAlignment="Stretch" InnerLeftContent="{antdicons:AntDesignIconProvider Kind=FolderFilled}"/>
-
+						<atom:Button Grid.Column="2">刷新</atom:Button>
+						<atom:Button Grid.Column="3">打开文件夹</atom:Button>
 					</Grid>
 					<atom:DataGrid x:Name="BasicCaseGrid"
 								   IsHideOnSinglePage="True"
 								   VerticalAlignment="Stretch"
 								   HorizontalAlignment="Stretch"
 								   ItemsSource="{Binding LocalFolderDataList}"
+								   HorizontalScrollBarVisibility="Visible"
+								   ColumnHeaderHeight="50" 
 								   Grid.Row="1"
 								   >
 						<atom:DataGrid.Columns>
-							<atom:DataGridTemplateColumn Header="名称" Width="*">
+							<atom:DataGridTemplateColumn Header="名称" Width="3*">
 								<atom:DataGridTemplateColumn.CellTemplate>
 									<DataTemplate>
 										<atom:HyperLinkTextBlock Text="{Binding Name}" />
@@ -135,13 +141,17 @@
 									</DataTemplate>
 								</atom:DataGridTemplateColumn.CellTemplate>
 							</atom:DataGridTemplateColumn>
-							<atom:DataGridTextColumn Header="大小" Binding="{Binding Size}" CanUserResize="True" Width="Auto" />
+							<atom:DataGridTextColumn Header="大小" Binding="{Binding Size,Converter={StaticResource FileSizeConverter}}" CanUserResize="True" Width="1*" />
 
 							<atom:DataGridTemplateColumn Header="操作" Width="Auto">
 								<atom:DataGridTemplateColumn.CellTemplate>
 									<DataTemplate>
 										<StackPanel Orientation="Horizontal" Spacing="15">
-											<atom:HyperLinkTextBlock Text="打开"  IsVisible="{Binding Tags, Converter={StaticResource FolderOpenVisibility}}" />
+											<atom:HyperLinkTextBlock Text="打开"
+																	 Command="{Binding DataContext.OpenFolder,
+																	 ElementName=MainWindowControl}"
+																	 CommandParameter="{Binding}"
+																	 IsVisible="{Binding Tags, Converter={StaticResource FolderOpenVisibility}}" />
 											<atom:HyperLinkTextBlock Text="上传"
 																	 Command="{Binding DataContext.UploadLinkCommand,
 																	 ElementName=MainWindowControl}"

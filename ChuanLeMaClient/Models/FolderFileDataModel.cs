@@ -9,7 +9,7 @@ namespace ChuanLeMaClient.Models
     public class FolderFileDataModel
     {
         public string Name { get; set; } = string.Empty;
-        public int Size { get; set; }
+        public long Size { get; set; }
         /// <summary>
         /// 是否是文件夹 否则是文件
         /// </summary>

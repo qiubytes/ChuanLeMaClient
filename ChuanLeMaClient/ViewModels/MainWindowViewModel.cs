@@ -150,6 +150,24 @@ namespace ChuanLeMaClient.ViewModels
                 $"上传成功!{info.Name}"
             ));
         }
+        public void OpenFolder(FolderFileDataModel info)
+        {
+            string fullPath = System.IO.Path.Combine(LocalWorkPath, info.Name);
+            try
+            {
+                LocalWorkPath = fullPath;
+                var list = _localFolderFileService.GetAllFoldersFiles(LocalWorkPath);
+                LocalFolderDataList.Clear();
+                LocalFolderDataList.AddRange(list);
+            }
+            catch (Exception ex)
+            {
+                _basicManager?.Show(new Notification(
+                    "温馨提示",
+                    $"打开失败!{ex.Message}"
+                ));
+            }
+        }
 
         [RelayCommand]
         public void Login()
