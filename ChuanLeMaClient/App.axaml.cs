@@ -81,10 +81,10 @@ namespace ChuanLeMaClient
         private void ConfigureContainer(ContainerBuilder builder)
         {
             #region 依赖注入注册日志组件
-            // 1. 注册 Serilog 的 ILogger（如果需要）
+            // 1. 注册 Serilog 的 ILogger（如果需要）  把SeriLog的单例对象注册进去Serilog.ILogger
             builder.Register(c => Log.Logger).As<Serilog.ILogger>().SingleInstance();
 
-            // 2. 注册 Microsoft.Extensions.Logging 的 ILoggerFactory
+            // 2. 注册 Microsoft.Extensions.Logging 的 ILoggerFactory 用于调用 微软ILogger接口使用 Serilog
             builder.Register(c =>
             {
                 var factory = new SerilogLoggerFactory(Log.Logger);
@@ -133,7 +133,7 @@ namespace ChuanLeMaClient
             builder.RegisterAssemblyTypes(assembly)
                    .Where(t => t.Name.EndsWith("ServiceImpl"))
                    .AsImplementedInterfaces()
-                   .InstancePerLifetimeScope(); //在同一个生命周期作用域内是单例
+                   .InstancePerLifetimeScope(); //在同一个生命周期作用域内是单例 
 
             // 注册窗口
             builder.RegisterType<MainWindow>().AsSelf().SingleInstance();
