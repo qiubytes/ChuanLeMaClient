@@ -12,6 +12,7 @@ using MsBox.Avalonia.Enums;
 using Splat;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Threading.Tasks;
 
 namespace ChuanLeMaClient.ViewModels
 {
@@ -51,7 +52,7 @@ namespace ChuanLeMaClient.ViewModels
                         ]
                     }
                ];
-            dataList.AddRange(items);
+            DataList.AddRange(items);
         }
         public MainWindowViewModel()
         {
@@ -73,12 +74,12 @@ namespace ChuanLeMaClient.ViewModels
         }
         public string Greeting { get; } = "Welcome to Avalonia!";
         [RelayCommand]
-        public async void ClickMe()
+        public async Task ClickMe()
         {
             var box = MessageBoxManager
     .GetMessageBoxStandard("Caption", "Are you sure you would like to delete appender_replace_page_1?",
         ButtonEnum.Ok);
-            var result = await box.ShowAsync();
+            var result = await box.ShowAsync(); 
         }
         [RelayCommand]
         public void ClickSub()

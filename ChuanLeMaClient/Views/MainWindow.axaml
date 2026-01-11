@@ -4,7 +4,7 @@
 		xmlns:v="using:ChuanLeMaClient.Views"
 		xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
 		xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-		mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+		mc:Ignorable="d" d:DesignWidth="900" d:DesignHeight="650"
 		x:Class="ChuanLeMaClient.Views.MainWindow"
 		x:DataType="vm:MainWindowViewModel"
 		xmlns:atom="https://atomui.net"
@@ -24,38 +24,61 @@
 		<vm:MainWindowViewModel/>
 	</Design.DataContext>
 
-	<!--<TextBlock Text="{Binding Greeting}" HorizontalAlignment="Center" VerticalAlignment="Center"/>-->
-	<!--	<StackPanel>
-	<TextBlock Text="Welcome to ChuanLeMaClient!" HorizontalAlignment="Center" Margin="0,20,0,20" FontSize="20"/>
-	<Button Content="Click Me" Command="{Binding ClickMeCommand}" Width="100" Height="30" HorizontalAlignment="Center"/>
-	<DatePicker DayFormat="ddd dd"/>
-	<TimePicker ClockIdentifier="24HourClock"
-	MinuteIncrement="20"/>
-	<atom:ProgressBar Value="50" Minimum="0" Maximum="100"
-	HorizontalAlignment="Center"
-	Width="400"/>
-	<atom:CircleProgress Value="40" Minimum="0" Maximum="100"
-	HorizontalAlignment="Center"/>
-	<StackPanel Orientation="Horizontal" Spacing="10" HorizontalAlignment="Center">
-	<atom:Button   >Sub</atom:Button>
-	<atom:Button Command="{Binding ClickSubCommand}"  >Add</atom:Button>
-	</StackPanel>
-	<atom:DatePicker IsNeedConfirm="False" Watermark="Select date"  />
-	<atom:TimePicker Watermark="Select time" IsNeedConfirm="False" IsShowNow="True" ClockIdentifier="HourClock24" />
-	</StackPanel>-->
-	<Grid>
+	<Grid Margin="10">
 		<Grid.RowDefinitions>
-			<RowDefinition Height="2*"/>
+			<RowDefinition Height="1*" />
 			<RowDefinition Height="5*"/>
 		</Grid.RowDefinitions>
-		<atom:Card Header="账号信息" SizeType="Large" Grid.Row="0" >
-			<StackPanel Orientation="Vertical" Spacing="3">
-				<atom:TextBlock>Card content</atom:TextBlock>
-				<atom:TextBlock>Card content</atom:TextBlock>
-				<atom:TextBlock>Card content</atom:TextBlock>
+		<atom:Card Header="账号信息" SizeType="Middle" Grid.Row="0" MinHeight="100" >
+			<!--	<Grid>
+			<Grid.ColumnDefinitions>
+			<ColumnDefinition Width="Auto"></ColumnDefinition>
+			<ColumnDefinition Width="Auto"></ColumnDefinition>
+			<ColumnDefinition Width="Auto"></ColumnDefinition>
+			<ColumnDefinition Width="Auto"></ColumnDefinition>
+			<ColumnDefinition Width="Auto"></ColumnDefinition>
+			<ColumnDefinition Width="Auto"></ColumnDefinition>
+			<ColumnDefinition Width="Auto"></ColumnDefinition>
+			</Grid.ColumnDefinitions>
+			<Label Grid.Column="0">服务地址</Label>
+			<atom:LineEdit Watermark="请输入服务器地址" Grid.Column="1"></atom:LineEdit>
+			<Label Grid.Column="2">账号</Label>
+			<atom:LineEdit Watermark="请输入账号" Grid.Column="3"></atom:LineEdit>
+			<Label Grid.Column="4">密码</Label>
+			<atom:LineEdit Watermark="请输入密码"  PasswordChar="*" Grid.Column="5"></atom:LineEdit>
+			<atom:Button ButtonType="Default"    Icon="{antdicons:AntDesignIconProvider Kind=FolderFilled}" Grid.Column="6" Grid.Row="0" >登录</atom:Button>
+			</Grid>-->
+			<atom:Row MinHeight="40" >
+				<atom:Col>
+					<StackPanel Orientation="Horizontal" HorizontalAlignment="Stretch" Spacing="10" Margin="10,0,0,0">
+						<Label Content="服务地址" VerticalAlignment="Center"/>
+						<atom:LineEdit Watermark="https://xx.com/api" HorizontalAlignment="Stretch" Width="250"/>
+					</StackPanel>
+				</atom:Col>
+				<atom:Col>
+					<StackPanel Orientation="Horizontal" HorizontalAlignment="Stretch" Spacing="10" Margin="15,0,0,0">
+						<Label Content="账号" VerticalAlignment="Center"/>
+						<atom:LineEdit Watermark="请输入账号" HorizontalAlignment="Stretch" Width="150"/>
+					</StackPanel>
+				</atom:Col>
+				<atom:Col>
+					<StackPanel Orientation="Horizontal" HorizontalAlignment="Stretch" Spacing="10" Margin="15,0,0,0">
+						<Label Content="密码" VerticalAlignment="Center"/>
+						<atom:LineEdit Watermark="请输入密码"  PasswordChar="*" HorizontalAlignment="Stretch" Width="150"/>
+					</StackPanel>
+				</atom:Col>
+				<atom:Col>
+					<atom:Button ButtonType="Primary"    Icon="{antdicons:AntDesignIconProvider Kind=LoginOutlined}"   HorizontalAlignment="Left" >登录</atom:Button>
+				</atom:Col>
+			</atom:Row>
+			<!--<StackPanel Orientation="Vertical" Spacing="3">
+			<StackPanel Orientation="Horizontal" HorizontalAlignment="Stretch">
+			<Label>服务地址</Label>
+			<atom:LineEdit Watermark="https://xx.com/api"></atom:LineEdit>
 			</StackPanel>
+			</StackPanel>-->
 		</atom:Card>
-		<atom:Card Header="文件信息" SizeType="Large"  Grid.Row="1" >
+		<atom:Card Header="文件信息" SizeType="Middle"  Grid.Row="1" Margin="0,10,0,0" >
 			<Grid>
 				<Grid.ColumnDefinitions>
 					<ColumnDefinition Width="1*"/>
@@ -67,7 +90,7 @@
 							<ColumnDefinition Width="Auto"/>
 							<ColumnDefinition Width="*"/>
 						</Grid.ColumnDefinitions>
-						<Label Content="工作目录" FontSize="16"  Grid.Column="0"  />
+						<Label Content="工作目录"   Grid.Column="0"  />
 						<atom:LineEdit  Grid.Column="1"   HorizontalAlignment="Stretch" InnerLeftContent="{antdicons:AntDesignIconProvider Kind=FolderFilled}"/>
 
 					</Grid>
