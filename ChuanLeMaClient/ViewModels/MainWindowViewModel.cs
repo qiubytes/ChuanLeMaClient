@@ -33,7 +33,11 @@ namespace ChuanLeMaClient.ViewModels
         /// 本地工作目录
         /// </summary>
         [ObservableProperty] public string localWorkPath;
-
+        /// <summary>
+        /// 登录按钮内容
+        /// </summary>
+        [ObservableProperty]
+        public string loginButtonContent = "登录";
         /// <summary>
         /// 由窗口调用 传入通知管理器
         /// </summary>
@@ -167,7 +171,7 @@ namespace ChuanLeMaClient.ViewModels
                 if (folders.Count > 0)
                 {
                     LocalWorkPath = folders[0].Path.LocalPath;
-                    this.LoadLocalFolderFiles(); 
+                    this.LoadLocalFolderFiles();
                 }
             }
         }
@@ -182,7 +186,7 @@ namespace ChuanLeMaClient.ViewModels
             try
             {
                 LocalWorkPath = fullPath;
-                this.LoadLocalFolderFiles(); 
+                this.LoadLocalFolderFiles();
             }
             catch (Exception ex)
             {
@@ -237,6 +241,7 @@ namespace ChuanLeMaClient.ViewModels
                 $"登录失败,账号或密码错误！"
             ));
             _testService.Hello();
+            LoginButtonContent = "已登录";
         }
 
     }

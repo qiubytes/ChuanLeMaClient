@@ -3,7 +3,7 @@
 		xmlns:vm="using:ChuanLeMaClient.ViewModels"
 		xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
 		xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-		mc:Ignorable="d" d:DesignWidth="900" d:DesignHeight="650"
+		mc:Ignorable="d" d:DesignWidth="1000" d:DesignHeight="650"
 		x:Class="ChuanLeMaClient.Views.MainWindow"
 		x:DataType="vm:MainWindowViewModel"
 		xmlns:atom="https://atomui.net"
@@ -72,7 +72,15 @@
 				<atom:Col Margin="15,0,0,0">
 					<atom:Button ButtonType="Primary"    Icon="{antdicons:AntDesignIconProvider Kind=LoginOutlined}"
 								 Command="{Binding LoginCommand}"
-								 HorizontalAlignment="Left" >登录</atom:Button>
+								 Content="{Binding LoginButtonContent}"		  HorizontalAlignment="Left" ></atom:Button>
+				</atom:Col>
+				<atom:Col Margin="15,0,0,0">
+					<atom:Button ButtonType="Default"    Icon="{antdicons:AntDesignIconProvider Kind=BookFilled}"
+								 HorizontalAlignment="Left" >任务</atom:Button>
+				</atom:Col>
+				<atom:Col Margin="15,0,0,0">
+					<atom:Button ButtonType="Default"    Icon="{antdicons:AntDesignIconProvider Kind=SettingFilled}"
+								 HorizontalAlignment="Left" >设置</atom:Button>
 				</atom:Col>
 			</atom:Row>
 			<!--<StackPanel Orientation="Vertical" Spacing="3">
