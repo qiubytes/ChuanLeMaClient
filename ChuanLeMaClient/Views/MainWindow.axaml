@@ -76,6 +76,7 @@
 				</atom:Col>
 				<atom:Col Margin="15,0,0,0">
 					<atom:Button ButtonType="Default"    Icon="{antdicons:AntDesignIconProvider Kind=BookFilled}"
+								 Command="{Binding OpenTaskWindow}"
 								 HorizontalAlignment="Left" >任务</atom:Button>
 				</atom:Col>
 				<atom:Col Margin="15,0,0,0">

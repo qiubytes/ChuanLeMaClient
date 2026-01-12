@@ -23,6 +23,7 @@ namespace ChuanLeMaClient.ViewModels
     public partial class MainWindowViewModel : ViewModelBase
     {
         private WindowNotificationManager? _basicManager;
+        private TaskWindow? _taskWindow;
 
         /// <summary>
         /// 本地文件目录列表
@@ -79,7 +80,7 @@ namespace ChuanLeMaClient.ViewModels
         private readonly ILocalFolderFileService _localFolderFileService;
 
 
-        public MainWindowViewModel()
+        public MainWindowViewModel(TaskWindow taskWindow)
         {
             // 总是检查是否在设计模式下
             if (Design.IsDesignMode)
@@ -91,6 +92,7 @@ namespace ChuanLeMaClient.ViewModels
                 throw new InvalidOperationException(
                     "这个 ViewModel 应该通过依赖注入创建");
             }
+            _taskWindow = taskWindow;
         }
         /// <summary>
         /// autofac 默认使用 可解析参数数量最多的构造函数
@@ -242,6 +244,20 @@ namespace ChuanLeMaClient.ViewModels
             ));
             _testService.Hello();
             LoginButtonContent = "已登录";
+        }
+        [RelayCommand]
+        public async void OpenTaskWindow()
+        {
+            if (Avalonia.Application.Current?.ApplicationLifetime is ClassicDesktopStyleApplicationLifetime lifetime)
+            {
+                var taskWindow = new TaskWindow() { DataContext = _taskWindow };
+                //切换主窗口
+                //var oldWindow = lifetime.MainWindow;
+                //lifetime.MainWindow = taskWindow;
+                //taskWindow.Show();
+                //oldWindow.Close();
+                taskWindow.Show();
+            }
         }
 
     }

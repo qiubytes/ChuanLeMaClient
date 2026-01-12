@@ -6,6 +6,9 @@ using System.Threading.Tasks;
 
 namespace ChuanLeMaClient.Models
 {
+    /// <summary>
+    /// 文件（文件夹）列表Model
+    /// </summary>
     public class FolderFileDataModel
     {
         public string Name { get; set; } = string.Empty;

@@ -1,9 +1,21 @@
-<Window xmlns="https://github.com/avaloniaui"
-        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
-        x:Class="ChuanLeMaClient.TaskWindow"
-        Title="TaskWindow">
-  Welcome to Avalonia!
+﻿<Window xmlns="https://github.com/avaloniaui"
+		xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+		xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+		xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+		mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+		x:Class="ChuanLeMaClient.TaskWindow"
+		xmlns:vm="using:ChuanLeMaClient.ViewModels"
+		xmlns:atom="https://atomui.net"
+		xmlns:antdicons="https://atomui.net/icons/antdesign"
+		WindowStartupLocation="CenterScreen"
+		Title="任务列表">
+	<Design.DataContext>
+		<!-- This only sets the DataContext for the previewer in an IDE,
+		to set the actual DataContext for runtime, set the DataContext property in code (look at App.axaml.cs) -->
+		<vm:MainWindowViewModel/>
+	</Design.DataContext>
+	<atom:TabControl>
+		<atom:TabItem Header="上传任务" Icon="{antdicons:AntDesignIconProvider Kind=CloudUploadOutlined}">Content of Tab Pane 1</atom:TabItem>
+		<atom:TabItem Header="下载任务" Icon="{antdicons:AntDesignIconProvider Kind=DownloadOutlined}">Content of Tab Pane 2</atom:TabItem>
+	</atom:TabControl>
 </Window>

@@ -139,7 +139,9 @@ namespace ChuanLeMaClient
             builder.RegisterType<MainWindow>().AsSelf().SingleInstance();
 
             // 注册 ViewModel
+            builder.RegisterType<TaskWindowViewModel>().AsSelf().InstancePerDependency();
             builder.RegisterType<MainWindowViewModel>().AsSelf().InstancePerDependency();
+          
 
             // 注册其他服务
             //builder.RegisterType<ApiService>().As<IApiService>().SingleInstance();
