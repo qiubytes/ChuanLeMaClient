@@ -1,4 +1,5 @@
 ﻿using Avalonia.Data.Converters;
+using ChuanLeMaClient.Models;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -15,28 +16,37 @@ namespace ChuanLeMaClient.Converters
     {
         public object? Convert(object? value, Type targetType, object? parameter, CultureInfo culture)
         {
-            if (value is long size)
+            if (value is FolderFileDataModel model)
             {
-                //单位 B
-                if (size < 1024)
-                {
-                    return $"{size} B";
-                }
-                else if (size < 1024 * 1024)
-                {
-                    return $"{(size / 1024.0):F2} KB";
-                }
-                else if (size < 1024 * 1024 * 1024)
-                {
-                    return $"{(size / (1024.0 * 1024.0)):F2} MB";
-                }
-                else
-                {
-                    return $"{(size / (1024.0 * 1024.0 * 1024.0)):F2} GB";
-                }
+                if (model.IsFolder) return "-";
 
+                if (model.Size is long size)
+                {
+                    //单位 B
+                    if (size < 1024)
+                    {
+                        return $"{size} B";
+                    }
+                    else if (size < 1024 * 1024)
+                    {
+                        return $"{(size / 1024.0):F2} KB";
+                    }
+                    else if (size < 1024 * 1024 * 1024)
+                    {
+                        return $"{(size / (1024.0 * 1024.0)):F2} MB";
+                    }
+                    else
+                    {
+                        return $"{(size / (1024.0 * 1024.0 * 1024.0)):F2} GB";
+                    }
+
+                }
+                else return "";
             }
-            else return "";
+            else
+            {
+                return "";
+            }
         }
 
         public object? ConvertBack(object? value, Type targetType, object? parameter, CultureInfo culture)

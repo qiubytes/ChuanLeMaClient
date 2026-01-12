@@ -33,7 +33,7 @@ namespace ChuanLeMaClient.Services.Implement
                 folderFileDataModels.Add(new FolderFileDataModel
                 {
                     Name = file.Name,
-                    Size = (int)file.Length,
+                    Size = (long)file.Length,
                     IsFolder = false,
                     Tags = new List<TagInfo>() { new TagInfo { Name = "文件", Color = "geekblue" } } 
                 });
