@@ -23,7 +23,7 @@ namespace ChuanLeMaClient.ViewModels
     public partial class MainWindowViewModel : ViewModelBase
     {
         private WindowNotificationManager? _basicManager;
-        private TaskWindow? _taskWindow;
+        private TaskWindowViewModel? _taskWindowViewModel;
 
         /// <summary>
         /// 本地文件目录列表
@@ -80,7 +80,7 @@ namespace ChuanLeMaClient.ViewModels
         private readonly ILocalFolderFileService _localFolderFileService;
 
 
-        public MainWindowViewModel(TaskWindow taskWindow)
+        public MainWindowViewModel()
         {
             // 总是检查是否在设计模式下
             if (Design.IsDesignMode)
@@ -92,17 +92,20 @@ namespace ChuanLeMaClient.ViewModels
                 throw new InvalidOperationException(
                     "这个 ViewModel 应该通过依赖注入创建");
             }
-            _taskWindow = taskWindow;
+
         }
         /// <summary>
         /// autofac 默认使用 可解析参数数量最多的构造函数
         /// </summary>
         /// <param name="testService"></param>
         /// <param name="localFolderFileService"></param>
-        public MainWindowViewModel(ITestService testService, ILocalFolderFileService localFolderFileService)
+        public MainWindowViewModel(ITestService testService,
+            ILocalFolderFileService localFolderFileService,
+            TaskWindowViewModel taskWindowViewModel)
         {
             _testService = testService;
             _localFolderFileService = localFolderFileService;
+            _taskWindowViewModel = taskWindowViewModel;
             // 延迟到UI线程空闲时初始化
             //Dispatcher.UIThread.Post(() =>
             //{
@@ -250,7 +253,7 @@ namespace ChuanLeMaClient.ViewModels
         {
             if (Avalonia.Application.Current?.ApplicationLifetime is ClassicDesktopStyleApplicationLifetime lifetime)
             {
-                var taskWindow = new TaskWindow() { DataContext = _taskWindow };
+                var taskWindow = new TaskWindow() { DataContext = _taskWindowViewModel };
                 //切换主窗口
                 //var oldWindow = lifetime.MainWindow;
                 //lifetime.MainWindow = taskWindow;

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -9,7 +10,7 @@ namespace ChuanLeMaClient.Models
     /// <summary>
     /// 任务Model
     /// </summary>
-    public class TaskModel
+    public class TaskModel : ObservableObject
     {
         public string TaskId { get; set; }
         public string LocalPath { get; set; }

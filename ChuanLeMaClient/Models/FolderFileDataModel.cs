@@ -1,4 +1,5 @@
-﻿using System;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -9,7 +10,7 @@ namespace ChuanLeMaClient.Models
     /// <summary>
     /// 文件（文件夹）列表Model
     /// </summary>
-    public class FolderFileDataModel
+    public class FolderFileDataModel: ObservableObject
     {
         public string Name { get; set; } = string.Empty;
         public long Size { get; set; }
