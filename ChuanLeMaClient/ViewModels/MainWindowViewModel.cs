@@ -2,6 +2,7 @@
 using AtomUI.Icons.IconPark;
 using Avalonia.Controls;
 using Avalonia.Controls.ApplicationLifetimes;
+using Avalonia.Platform.Storage;
 using Avalonia.Threading;
 using ChuanLeMaClient.Models;
 using ChuanLeMaClient.Services.Implement;
@@ -32,7 +33,7 @@ namespace ChuanLeMaClient.ViewModels
         /// 本地工作目录
         /// </summary>
         [ObservableProperty] public string localWorkPath;
-    
+
         /// <summary>
         /// 由窗口调用 传入通知管理器
         /// </summary>
@@ -73,12 +74,12 @@ namespace ChuanLeMaClient.ViewModels
         private ITestService _testService;
         private readonly ILocalFolderFileService _localFolderFileService;
 
-      
+
         public MainWindowViewModel()
         {
             // 总是检查是否在设计模式下
             if (Design.IsDesignMode)
-            { 
+            {
             }
             else
             {
@@ -119,9 +120,8 @@ namespace ChuanLeMaClient.ViewModels
         private void InitLocalFolderFiles()
         {
             LocalWorkPath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
-            var list = _localFolderFileService.GetAllFoldersFiles(LocalWorkPath);
-            LocalFolderDataList.Clear();
-            LocalFolderDataList.AddRange(list);
+            this.LoadLocalFolderFiles();
+
         }
 
         [RelayCommand]
@@ -150,15 +150,39 @@ namespace ChuanLeMaClient.ViewModels
                 $"上传成功!{info.Name}"
             ));
         }
-        public void OpenFolder(FolderFileDataModel info)
+        /// <summary>
+        /// 打开文件夹选择对话框
+        /// </summary>
+        [RelayCommand]
+        public async Task OpenFolderDialog()
+        {
+            if (Avalonia.Application.Current?.ApplicationLifetime is ClassicDesktopStyleApplicationLifetime lifetime)
+            {
+                Avalonia.Controls.Window window = lifetime.MainWindow;
+                var storageprovider = window.StorageProvider;
+                var folders = await storageprovider.OpenFolderPickerAsync(new FolderPickerOpenOptions()
+                {
+                    AllowMultiple = false
+                });
+                if (folders.Count > 0)
+                {
+                    LocalWorkPath = folders[0].Path.LocalPath;
+                    this.LoadLocalFolderFiles(); 
+                }
+            }
+        }
+        /// <summary>
+        /// 打开目录
+        /// </summary>
+        /// <param name="info"></param>
+        [RelayCommand]
+        public void LinkOpenFolder(FolderFileDataModel info)
         {
             string fullPath = System.IO.Path.Combine(LocalWorkPath, info.Name);
             try
             {
                 LocalWorkPath = fullPath;
-                var list = _localFolderFileService.GetAllFoldersFiles(LocalWorkPath);
-                LocalFolderDataList.Clear();
-                LocalFolderDataList.AddRange(list);
+                this.LoadLocalFolderFiles(); 
             }
             catch (Exception ex)
             {
@@ -168,7 +192,43 @@ namespace ChuanLeMaClient.ViewModels
                 ));
             }
         }
-
+        /// <summary>
+        /// 返回上级目录
+        /// </summary>
+        [RelayCommand]
+        public void CancelParentFolder()
+        {
+            try
+            {
+                LocalWorkPath = LocalWorkPath.TrimEnd(System.IO.Path.DirectorySeparatorChar);
+                var parentDir = System.IO.Directory.GetParent(LocalWorkPath);
+                if (parentDir != null)
+                {
+                    LocalWorkPath = parentDir.FullName;
+                    this.LoadLocalFolderFiles();
+                }
+            }
+            catch (Exception ex)
+            {
+                _basicManager?.Show(new Notification(
+                    "温馨提示",
+                    $"打开失败!{ex.Message}"
+                ));
+            }
+        }
+        /// <summary>
+        /// 加载本地目录、文件
+        /// </summary>
+        /// <param name="path"></param>
+        private void LoadLocalFolderFiles()
+        {
+            if (LocalWorkPath != null)
+            {
+                var list = _localFolderFileService.GetAllFoldersFiles(LocalWorkPath);
+                LocalFolderDataList.Clear();
+                LocalFolderDataList.AddRange(list);
+            }
+        }
         [RelayCommand]
         public void Login()
         {
@@ -178,6 +238,6 @@ namespace ChuanLeMaClient.ViewModels
             ));
             _testService.Hello();
         }
-       
+
     }
 }

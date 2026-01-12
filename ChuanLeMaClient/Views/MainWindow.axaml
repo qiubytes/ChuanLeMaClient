@@ -94,7 +94,7 @@
 						<RowDefinition Height="Auto"/>
 						<RowDefinition Height="*"/>
 					</Grid.RowDefinitions>
-					<Grid Grid.Row="0">
+					<Grid Grid.Row="0" ColumnSpacing="12">
 						<Grid.ColumnDefinitions>
 							<ColumnDefinition Width="Auto"/>
 							<ColumnDefinition Width="*"/>
@@ -102,9 +102,10 @@
 							<ColumnDefinition Width="Auto"/>
 						</Grid.ColumnDefinitions>
 						<Label Content="工作目录"   Grid.Column="0"  />
-						<atom:LineEdit  Grid.Column="1" Text="{Binding LocalWorkPath }"   HorizontalAlignment="Stretch" InnerLeftContent="{antdicons:AntDesignIconProvider Kind=FolderFilled}"/>
-						<atom:Button Grid.Column="2">刷新</atom:Button>
-						<atom:Button Grid.Column="3">打开文件夹</atom:Button>
+						<atom:LineEdit  Grid.Column="1" IsReadOnly="True" Text="{Binding LocalWorkPath }"   HorizontalAlignment="Stretch" InnerLeftContent="{antdicons:AntDesignIconProvider Kind=FolderFilled}"/>
+						<atom:Button Grid.Column="2" ButtonType="Primary" Command="{Binding OpenFolderDialogCommand}">打开文件夹</atom:Button>
+						<atom:Button Grid.Column="3" ButtonType="Default" Icon="{antdicons:AntDesignIconProvider Kind=SwapLeftOutlined }" Command="{Binding CancelParentFolderCommand}">返回上级</atom:Button>
+
 					</Grid>
 					<atom:DataGrid x:Name="BasicCaseGrid"
 								   IsHideOnSinglePage="True"
@@ -113,8 +114,8 @@
 								   ItemsSource="{Binding LocalFolderDataList}"
 								   HorizontalScrollBarVisibility="Visible"
 								   ColumnHeaderHeight="50"
-								   Grid.Row="1" 
-								   > 
+								   Grid.Row="1"
+								   >
 						<!--
 						behaviors:DataGridRightClickBehavior.RightClickCommand="{Binding RightClickCommand}"
 						behaviors:DataGridRightClickBehavior.RightClickCommandParameter="{Binding SelectedItem}"
@@ -168,12 +169,12 @@
 													<MenuItem Header="上传"
 															  Command="{Binding DataContext.UploadLinkCommand,
 															  ElementName=MainWindowControl}"
-															  CommandParameter="{Binding}" /> 
+															  CommandParameter="{Binding}" />
 												</ContextMenu>
 											</StackPanel.ContextMenu>
 
 											<atom:HyperLinkTextBlock Text="打开"
-																	 Command="{Binding DataContext.OpenFolder,
+																	 Command="{Binding DataContext.LinkOpenFolderCommand,
 																	 ElementName=MainWindowControl}"
 																	 CommandParameter="{Binding}"
 																	 IsVisible="{Binding Tags, Converter={StaticResource FolderOpenVisibility}}" />
@@ -182,7 +183,7 @@
 																	 ElementName=MainWindowControl}"
 																	 CommandParameter="{Binding}" />
 											<atom:HyperLinkTextBlock Text="删除" />
-											
+
 										</StackPanel>
 									</DataTemplate>
 								</atom:DataGridTemplateColumn.CellTemplate>
