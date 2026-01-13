@@ -8,6 +8,7 @@
 		xmlns:atom="https://atomui.net"
 		xmlns:antdicons="https://atomui.net/icons/antdesign"
 		x:DataType="vm:TaskWindowViewModel"
+		xmlns:converters="clr-namespace:ChuanLeMaClient.Converters"
 		WindowStartupLocation="CenterScreen"
 		Title="任务列表">
 	<Design.DataContext>
@@ -15,6 +16,9 @@
 		to set the actual DataContext for runtime, set the DataContext property in code (look at App.axaml.cs) -->
 		<vm:TaskWindowViewModel/>
 	</Design.DataContext>
+	<Window.Resources>
+		<converters:TaskCompletePercentConverter x:Key="TaskCompletePercent"/>
+	</Window.Resources>
 	<atom:TabControl>
 		<atom:TabItem Header="上传任务" Icon="{antdicons:AntDesignIconProvider Kind=CloudUploadOutlined}">
 			<Grid Margin="12,0,12,12">
@@ -48,7 +52,7 @@
 						<atom:DataGridTemplateColumn Header="任务进度"  Width="*" >
 							<atom:DataGridTemplateColumn.CellTemplate>
 								<DataTemplate>
-									<atom:ProgressBar SizeType="Large" Value="30" Minimum="0" Maximum="100" />
+									<atom:ProgressBar SizeType="Large" Value="{Binding Progress}" Minimum="0" Maximum="100" />
 								</DataTemplate>
 							</atom:DataGridTemplateColumn.CellTemplate>
 						</atom:DataGridTemplateColumn>
@@ -84,7 +88,7 @@
 				<!--Total总条数-->
 				<atom:Pagination Total="{Binding UploadTasks.Count}" CurrentPage="{Binding UploadTaskCurrentPage,Mode=TwoWay}" SizeType="Middle" PageSize="10" IsShowSizeChanger="False"
 								 Grid.Row="1"
-								 
+
 								 IsShowQuickJumper="True" />
 			</Grid>
 

@@ -134,14 +134,17 @@ namespace ChuanLeMaClient
                    .Where(t => t.Name.EndsWith("ServiceImpl"))
                    .AsImplementedInterfaces()
                    .InstancePerLifetimeScope(); //在同一个生命周期作用域内是单例 
-
+            //2、注册单例服务
+            builder.RegisterType<UploadServiceImplSingleInstance>()
+                   .As<Services.Inteface.IUploadService>()
+                   .SingleInstance(); // 整个应用程序生命周期内是单例
             // 注册窗口
             builder.RegisterType<MainWindow>().AsSelf().SingleInstance();
 
             // 注册 ViewModel
             builder.RegisterType<TaskWindowViewModel>().AsSelf().InstancePerDependency();
             builder.RegisterType<MainWindowViewModel>().AsSelf().InstancePerDependency();
-          
+
 
             // 注册其他服务
             //builder.RegisterType<ApiService>().As<IApiService>().SingleInstance();

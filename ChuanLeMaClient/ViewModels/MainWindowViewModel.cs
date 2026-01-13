@@ -24,7 +24,10 @@ namespace ChuanLeMaClient.ViewModels
     {
         private WindowNotificationManager? _basicManager;
         private TaskWindowViewModel? _taskWindowViewModel;
-
+        /// <summary>
+        /// 上传服务
+        /// </summary>
+        private IUploadService? _uploadService;
         /// <summary>
         /// 本地文件目录列表
         /// </summary>
@@ -101,11 +104,14 @@ namespace ChuanLeMaClient.ViewModels
         /// <param name="localFolderFileService"></param>
         public MainWindowViewModel(ITestService testService,
             ILocalFolderFileService localFolderFileService,
-            TaskWindowViewModel taskWindowViewModel)
+            TaskWindowViewModel taskWindowViewModel,
+            IUploadService uploadService
+            )
         {
             _testService = testService;
             _localFolderFileService = localFolderFileService;
             _taskWindowViewModel = taskWindowViewModel;
+            _uploadService = uploadService;
             // 延迟到UI线程空闲时初始化
             //Dispatcher.UIThread.Post(() =>
             //{
@@ -154,10 +160,11 @@ namespace ChuanLeMaClient.ViewModels
         [RelayCommand]
         public void UploadLink(FolderFileDataModel info)
         {
-            _basicManager?.Show(new Notification(
-                "温馨提示",
-                $"上传成功!{info.Name}"
-            ));
+            //_basicManager?.Show(new Notification(
+            //    "温馨提示",
+            //    $"上传成功!{info.Name}"
+            //));
+            _uploadService?.AddTask(System.IO.Path.Combine(LocalWorkPath, info.Name), "test", "token");
         }
         /// <summary>
         /// 打开文件夹选择对话框
