@@ -92,7 +92,7 @@
 			</StackPanel>-->
 		</atom:Card>
 		<atom:Card Header="文件信息" SizeType="Middle"  Grid.Row="1" Margin="0,10,0,0" >
-			<Grid>
+			<Grid ColumnSpacing="10">
 				<Grid.ColumnDefinitions>
 					<ColumnDefinition Width="1*"/>
 					<ColumnDefinition Width="1*"/>
@@ -110,13 +110,13 @@
 							<ColumnDefinition Width="Auto"/>
 							<ColumnDefinition Width="Auto"/>
 						</Grid.ColumnDefinitions>
-						<Label Content="工作目录"   Grid.Column="0"  />
+						<Label Content="本地目录"   Grid.Column="0"  />
 						<atom:LineEdit  Grid.Column="1" IsReadOnly="True" Text="{Binding LocalWorkPath }"   HorizontalAlignment="Stretch" InnerLeftContent="{antdicons:AntDesignIconProvider Kind=FolderFilled}"/>
 						<atom:Button Grid.Column="2" ButtonType="Primary" Command="{Binding OpenFolderDialogCommand}" Icon="{antdicons:AntDesignIconProvider Kind=FolderOpenFilled}">打开文件夹</atom:Button>
 						<atom:Button Grid.Column="3" ButtonType="Default" Icon="{antdicons:AntDesignIconProvider Kind=SwapLeftOutlined }" Command="{Binding CancelParentFolderCommand}">返回上级</atom:Button>
 
 					</Grid>
-					<atom:DataGrid x:Name="BasicCaseGrid"
+					<atom:DataGrid x:Name="LocalFileGrid"
 								   IsHideOnSinglePage="True"
 								   VerticalAlignment="Stretch"
 								   HorizontalAlignment="Stretch"
@@ -198,6 +198,100 @@
 								</atom:DataGridTemplateColumn.CellTemplate>
 							</atom:DataGridTemplateColumn>
 						</atom:DataGrid.Columns>
+					</atom:DataGrid>
+				</Grid>
+				<!--
+
+				远程文件
+				下面是远程文件列表
+
+
+				-->
+				<Grid  Grid.Column="1"  >
+
+					<Grid.RowDefinitions>
+						<RowDefinition Height="Auto"/>
+						<RowDefinition Height="*"/>
+					</Grid.RowDefinitions>
+					<Grid Grid.Row="0" ColumnSpacing="12">
+						<Grid.ColumnDefinitions>
+							<ColumnDefinition Width="Auto"/>
+							<ColumnDefinition Width="*"/>
+							<ColumnDefinition Width="Auto"/>
+							<ColumnDefinition Width="Auto"/>
+						</Grid.ColumnDefinitions>
+						<Label Content="远程目录"   Grid.Column="0"  />
+						<atom:LineEdit  Grid.Column="1" IsReadOnly="True" Text="{Binding RemoteWorkPath }"   HorizontalAlignment="Stretch" InnerLeftContent="{antdicons:AntDesignIconProvider Kind=FolderFilled}"/> 
+						<atom:Button Grid.Column="2" ButtonType="Default" Icon="{antdicons:AntDesignIconProvider Kind=SwapLeftOutlined }" Command="{Binding CancelParentFolderCommand}">返回上级</atom:Button>
+
+					</Grid>
+					<atom:DataGrid x:Name="RemoteFileGrid"
+								   IsHideOnSinglePage="True"
+								   VerticalAlignment="Stretch"
+								   HorizontalAlignment="Stretch"
+								   ItemsSource="{Binding LocalFolderDataList}"
+								   HorizontalScrollBarVisibility="Visible"
+								   ColumnHeaderHeight="50"
+								   Grid.Row="1"
+								   >
+								   <atom:DataGrid.Columns>
+									   <atom:DataGridTemplateColumn Header="名称" Width="3*">
+										   <atom:DataGridTemplateColumn.CellTemplate>
+											   <DataTemplate>
+												   <atom:HyperLinkTextBlock Text="{Binding Name}" />
+											   </DataTemplate>
+										   </atom:DataGridTemplateColumn.CellTemplate>
+									   </atom:DataGridTemplateColumn>
+
+									   <atom:DataGridTemplateColumn Header="类型" Width="Auto" >
+										   <atom:DataGridTemplateColumn.CellTemplate>
+											   <DataTemplate>
+												   <ItemsControl ItemsSource="{Binding Tags}">
+													   <ItemsControl.ItemsPanel>
+														   <ItemsPanelTemplate>
+															   <StackPanel Orientation="Horizontal" Spacing="5" />
+														   </ItemsPanelTemplate>
+													   </ItemsControl.ItemsPanel>
+													   <ItemsControl.ItemTemplate>
+														   <DataTemplate>
+															   <atom:Tag TagText="{Binding Name}" TagColor="{Binding Color}"></atom:Tag>
+														   </DataTemplate>
+													   </ItemsControl.ItemTemplate>
+												   </ItemsControl>
+											   </DataTemplate>
+										   </atom:DataGridTemplateColumn.CellTemplate>
+									   </atom:DataGridTemplateColumn>
+									   <atom:DataGridTextColumn Header="大小" Binding="{Binding,Converter={StaticResource FileSizeConverter}}" CanUserResize="True" Width="1*" />
+
+									   <atom:DataGridTemplateColumn Header="操作" Width="Auto">
+										   <atom:DataGridTemplateColumn.CellTemplate>
+											   <DataTemplate>
+												   <StackPanel Orientation="Horizontal" Spacing="15">
+													   <StackPanel.ContextMenu>
+														   <ContextMenu>
+															   <MenuItem Header="下载"
+																		 Command="{Binding DataContext.UploadLinkCommand,
+																		 ElementName=MainWindowControl}"
+																		 CommandParameter="{Binding}" />
+														   </ContextMenu>
+													   </StackPanel.ContextMenu>
+
+													   <atom:HyperLinkTextBlock Text="打开"
+																				Command="{Binding DataContext.LinkOpenFolderCommand,
+																				ElementName=MainWindowControl}"
+																				CommandParameter="{Binding}"
+																				IsVisible="{Binding Tags, Converter={StaticResource FolderOpenVisibility}}" />
+													   <atom:HyperLinkTextBlock Text="下载"
+																				Command="{Binding DataContext.UploadLinkCommand,
+																				ElementName=MainWindowControl}"
+																				CommandParameter="{Binding}" />
+													   <atom:HyperLinkTextBlock Text="删除" />
+
+												   </StackPanel>
+											   </DataTemplate>
+										   </atom:DataGridTemplateColumn.CellTemplate>
+									   </atom:DataGridTemplateColumn>
+								   </atom:DataGrid.Columns>
 					</atom:DataGrid>
 				</Grid>
 

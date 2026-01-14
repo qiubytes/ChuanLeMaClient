@@ -38,6 +38,15 @@ namespace ChuanLeMaClient.ViewModels
         /// </summary>
         [ObservableProperty] public string localWorkPath;
         /// <summary>
+        /// 远程文件目录列表
+        /// </summary>
+        [ObservableProperty] public ObservableCollection<FolderFileDataModel> remoteFolderDataList = new();
+
+        /// <summary>
+        /// 远程工作目录
+        /// </summary>
+        [ObservableProperty] public string remoteWorkPath="/";
+        /// <summary>
         /// 登录按钮内容
         /// </summary>
         [ObservableProperty]
