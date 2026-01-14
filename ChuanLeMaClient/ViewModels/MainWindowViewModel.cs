@@ -245,6 +245,19 @@ namespace ChuanLeMaClient.ViewModels
             }
         }
         /// <summary>
+        /// 打开远程目录
+        /// </summary>
+        /// <param name="info"></param>
+        [RelayCommand]
+        public void LinkOpenFolderRemote(FolderFileDataModel info)
+        { 
+            _messageManager.Show(new AtomUI.Desktop.Controls.Message(
+                                    type: MessageType.Success,
+                                    content: "功能开发中...",
+                                    expiration: TimeSpan.FromSeconds(1)
+                                  )); 
+        }
+        /// <summary>
         /// 返回上级目录
         /// </summary>
         [RelayCommand]

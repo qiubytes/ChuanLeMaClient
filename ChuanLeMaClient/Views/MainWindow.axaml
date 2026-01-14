@@ -277,7 +277,7 @@
 											</StackPanel.ContextMenu>
 
 											<atom:HyperLinkTextBlock Text="打开"
-																	 Command="{Binding DataContext.LinkOpenFolderCommand,
+																	 Command="{Binding DataContext.LinkOpenFolderRemoteCommand,
 																	 ElementName=MainWindowControl}"
 																	 CommandParameter="{Binding}"
 																	 IsVisible="{Binding Tags, Converter={StaticResource FolderOpenVisibility}}" />
