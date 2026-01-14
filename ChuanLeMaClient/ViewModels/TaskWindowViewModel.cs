@@ -19,8 +19,16 @@ namespace ChuanLeMaClient.ViewModels
         public ObservableCollection<TaskModel> uploadTasks = new();
         [ObservableProperty]
         public int uploadTaskCurrentPage = 2;
+        [ObservableProperty]
+        public ObservableCollection<TaskModel> downloadTasks = new();
+        [ObservableProperty]
+        public int downloadTaskCurrentPage = 2;
         // 自动生成的属性变更回调方法
         partial void OnUploadTaskCurrentPageChanged(int value)
+        {
+
+        }
+        partial void OnDownloadTaskCurrentPageChanged(int value)
         {
 
         }

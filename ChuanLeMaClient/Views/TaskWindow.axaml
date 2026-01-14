@@ -26,7 +26,7 @@
 					<RowDefinition Height="*"></RowDefinition>
 					<RowDefinition Height="Auto"></RowDefinition>
 				</Grid.RowDefinitions>
-				<atom:DataGrid x:Name="BasicCaseGrid"
+				<atom:DataGrid x:Name="UploadTaskGrid"
 							   IsHideOnSinglePage="True"
 							   VerticalAlignment="Stretch"
 							   HorizontalAlignment="Stretch"
@@ -94,6 +94,77 @@
 
 
 		</atom:TabItem>
-		<atom:TabItem Header="下载任务" Icon="{antdicons:AntDesignIconProvider Kind=DownloadOutlined}">Content of Tab Pane 2</atom:TabItem>
+		<atom:TabItem Header="下载任务" Icon="{antdicons:AntDesignIconProvider Kind=DownloadOutlined}">
+			<Grid Margin="12,0,12,12">
+				<Grid.RowDefinitions>
+					<RowDefinition Height="*"></RowDefinition>
+					<RowDefinition Height="Auto"></RowDefinition>
+				</Grid.RowDefinitions>
+				<atom:DataGrid x:Name="DownLoadTaskGrid"
+							   IsHideOnSinglePage="True"
+							   VerticalAlignment="Stretch"
+							   HorizontalAlignment="Stretch"
+							   ItemsSource="{Binding DownloadTasks}"
+							   HorizontalScrollBarVisibility="Visible"
+							   Grid.Row="0"
+							   >
+					<atom:DataGrid.Columns>
+						<atom:DataGridTemplateColumn Header="本地名称"  Width="Auto">
+							<atom:DataGridTemplateColumn.CellTemplate>
+								<DataTemplate>
+									<atom:HyperLinkTextBlock Text="{Binding LocalPath}" />
+								</DataTemplate>
+							</atom:DataGridTemplateColumn.CellTemplate>
+						</atom:DataGridTemplateColumn>
+						<atom:DataGridTemplateColumn Header="远程名称"  Width="Auto">
+							<atom:DataGridTemplateColumn.CellTemplate>
+								<DataTemplate>
+									<atom:HyperLinkTextBlock Text="{Binding RemotePath}" />
+								</DataTemplate>
+							</atom:DataGridTemplateColumn.CellTemplate>
+						</atom:DataGridTemplateColumn>
+						<atom:DataGridTemplateColumn Header="任务进度"  Width="*" >
+							<atom:DataGridTemplateColumn.CellTemplate>
+								<DataTemplate>
+									<atom:ProgressBar SizeType="Large" Value="{Binding Progress}" Minimum="0" Maximum="100" />
+								</DataTemplate>
+							</atom:DataGridTemplateColumn.CellTemplate>
+						</atom:DataGridTemplateColumn>
+						<atom:DataGridTemplateColumn Header="已完成大小" Width="Auto" >
+							<atom:DataGridTemplateColumn.CellTemplate>
+								<DataTemplate>
+									<atom:HyperLinkTextBlock Text="{Binding  CompletedSize}" />
+								</DataTemplate>
+							</atom:DataGridTemplateColumn.CellTemplate>
+						</atom:DataGridTemplateColumn>
+						<atom:DataGridTemplateColumn Header="总大小"  Width="Auto" >
+							<atom:DataGridTemplateColumn.CellTemplate>
+								<DataTemplate>
+									<atom:HyperLinkTextBlock Text="{Binding  FileSize}" />
+								</DataTemplate>
+							</atom:DataGridTemplateColumn.CellTemplate>
+						</atom:DataGridTemplateColumn>
+						<atom:DataGridTemplateColumn Header="操作" Width="Auto">
+							<atom:DataGridTemplateColumn.CellTemplate>
+								<DataTemplate>
+									<StackPanel Orientation="Horizontal" Spacing="15">
+										<atom:HyperLinkTextBlock Text="开始"  />
+										<atom:HyperLinkTextBlock Text="暂停"  />
+										<atom:HyperLinkTextBlock Text="停止"  />
+										<atom:HyperLinkTextBlock Text="删除" />
+									</StackPanel>
+								</DataTemplate>
+							</atom:DataGridTemplateColumn.CellTemplate>
+						</atom:DataGridTemplateColumn>
+					</atom:DataGrid.Columns>
+
+				</atom:DataGrid>
+				<!--Total总条数-->
+				<atom:Pagination Total="{Binding UploadTasks.Count}" CurrentPage="{Binding UploadTaskCurrentPage,Mode=TwoWay}" SizeType="Middle" PageSize="10" IsShowSizeChanger="False"
+								 Grid.Row="1"
+
+								 IsShowQuickJumper="True" />
+			</Grid>
+		</atom:TabItem>
 	</atom:TabControl>
 </Window>
