@@ -138,6 +138,9 @@ namespace ChuanLeMaClient
             builder.RegisterType<UploadServiceImplSingleInstance>()
                    .As<Services.Inteface.IUploadService>()
                    .SingleInstance(); // 整个应用程序生命周期内是单例
+            builder.RegisterType<DownloadServiceImplSingleInstance>()
+                .As<Services.Inteface.IDownloadService>()
+                .SingleInstance();
             // 注册窗口
             builder.RegisterType<MainWindow>().AsSelf().SingleInstance();
 

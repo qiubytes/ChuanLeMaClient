@@ -22,12 +22,24 @@ namespace ChuanLeMaClient.ViewModels
 {
     public partial class MainWindowViewModel : ViewModelBase
     {
+        /// <summary>
+        /// Notification 通知提醒
+        /// </summary>
         private WindowNotificationManager? _basicManager;
+        /// <summary>
+        /// Message 全局提示
+        /// </summary>
+        private WindowMessageManager? _messageManager;
+
         private TaskWindowViewModel? _taskWindowViewModel;
         /// <summary>
         /// 上传服务
         /// </summary>
         private IUploadService? _uploadService;
+        /// <summary>
+        /// 下载服务
+        /// </summary>
+        private IDownloadService? _downloadService;
         /// <summary>
         /// 本地文件目录列表
         /// </summary>
@@ -45,7 +57,7 @@ namespace ChuanLeMaClient.ViewModels
         /// <summary>
         /// 远程工作目录
         /// </summary>
-        [ObservableProperty] public string remoteWorkPath="/";
+        [ObservableProperty] public string remoteWorkPath = "/";
         /// <summary>
         /// 登录按钮内容
         /// </summary>
@@ -87,6 +99,10 @@ namespace ChuanLeMaClient.ViewModels
             //   ];
             //LocalFolderDataList.AddRange(items);
         }
+        public void SetMessageManager(WindowMessageManager manager)
+        {
+            _messageManager = manager;
+        }
 
         private ITestService _testService;
         private readonly ILocalFolderFileService _localFolderFileService;
@@ -114,13 +130,15 @@ namespace ChuanLeMaClient.ViewModels
         public MainWindowViewModel(ITestService testService,
             ILocalFolderFileService localFolderFileService,
             TaskWindowViewModel taskWindowViewModel,
-            IUploadService uploadService
+            IUploadService uploadService,
+            IDownloadService downloadService
             )
         {
             _testService = testService;
             _localFolderFileService = localFolderFileService;
             _taskWindowViewModel = taskWindowViewModel;
             _uploadService = uploadService;
+            _downloadService = downloadService;
             // 延迟到UI线程空闲时初始化
             //Dispatcher.UIThread.Post(() =>
             //{
@@ -174,6 +192,15 @@ namespace ChuanLeMaClient.ViewModels
             //    $"上传成功!{info.Name}"
             //));
             _uploadService?.AddTask(System.IO.Path.Combine(LocalWorkPath, info.Name), "test", "token");
+        }
+        [RelayCommand]
+        public void DownloadLink(FolderFileDataModel info)
+        {
+            //_basicManager?.Show(new Notification(
+            //    "温馨提示",
+            //    $"上传成功!{info.Name}"
+            //));
+            _downloadService?.AddTask(System.IO.Path.Combine(LocalWorkPath, info.Name), "test", "token");
         }
         /// <summary>
         /// 打开文件夹选择对话框
@@ -257,11 +284,17 @@ namespace ChuanLeMaClient.ViewModels
         [RelayCommand]
         public void Login()
         {
-            _basicManager?.Show(new Notification(
-                "温馨提示",
-                $"登录失败,账号或密码错误！"
-            ));
+            //_basicManager?.Show(new Notification(
+            //    "温馨提示",
+            //    $"登录失败,账号或密码错误！"
+            //));
             _testService.Hello();
+            _messageManager?.Show(new AtomUI.Desktop.Controls.Message(
+                                    type: MessageType.Loading,
+                                    content: "登录中...",
+                                    expiration: TimeSpan.FromSeconds(1)
+                                ));
+
             LoginButtonContent = "已登录";
         }
         [RelayCommand]

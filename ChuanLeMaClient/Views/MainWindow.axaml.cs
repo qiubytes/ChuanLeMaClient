@@ -1,4 +1,3 @@
-
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Interactivity;
@@ -16,7 +15,7 @@ namespace ChuanLeMaClient.Views
         {
             this.Loaded += MainWindow_OnAttachedToVisualTree;
             InitializeComponent();
-           
+
         }
         private void MainWindow_OnAttachedToVisualTree(object? sender, RoutedEventArgs e)
         {
@@ -28,6 +27,11 @@ namespace ChuanLeMaClient.Views
                     Position = AtomUI.Desktop.Controls.NotificationPosition.TopRight
                 };
                 vm.SetNotificationManager(_notificationManager);
+                AtomUI.Desktop.Controls.WindowMessageManager message = new AtomUI.Desktop.Controls.WindowMessageManager(this)
+                {
+                    MaxItems = 3,
+                };
+                vm.SetMessageManager(message);
             }
 
         }
