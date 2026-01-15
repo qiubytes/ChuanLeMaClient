@@ -52,13 +52,40 @@ namespace ChuanLeMaClient.ViewModels
                 });
 
             });
+
+            Messenger.Register<TaskWindowViewModel, DownloadProgressMessage, string>(this, "downloadmsg", (r, m) =>
+            {
+                Dispatcher.UIThread.Post(() =>
+                {
+                    var task = DownloadTasks.FirstOrDefault(t => t.TaskId == m.taskid);
+                    if (task != null)
+                    {
+                        task.CompletedSize = Convert.ToInt64(m.progress / 100.0 * task.FileSize);
+                        task.Status = m.progress >= 100 ? "已完成" : "进行中";
+                        // 通知属性变更
+                        //var index = UploadTasks.IndexOf(task);
+                        //UploadTasks[index] = task; // 触发集合变更通知
+                    }
+                });
+
+            });
         }
-        
+
         public TaskWindowViewModel()
         {
             //接收消息
             IsActive = true;
-
+            downloadTasks.Add(
+                new TaskModel
+                {
+                    TaskId = "3",
+                    LocalPath = "C:\\Files\\fileA.txt",
+                    RemotePath = "/remote/fileA.txt",
+                    FileSize = 1024,
+                    CompletedSize = 512,
+                    Status = "进行中"
+                }
+                );
             UploadTasks.AddRange(
                 new List<TaskModel>
                 {
