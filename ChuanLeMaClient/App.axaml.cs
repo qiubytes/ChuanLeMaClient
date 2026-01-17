@@ -10,6 +10,7 @@ using Avalonia.Markup.Xaml;
 using ChuanLeMaClient.Services.Implement;
 using ChuanLeMaClient.ViewModels;
 using ChuanLeMaClient.Views;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Serilog;
 using Serilog.Events;
@@ -44,7 +45,7 @@ namespace ChuanLeMaClient
                 builder.UseDesktopColorPicker();
             });
             // 构建 Autofac 容器
-            var builder = new ContainerBuilder();
+            var builder = new ContainerBuilder(); 
             ConfigureContainer(builder);
             _container = builder.Build();
         }
@@ -141,6 +142,18 @@ namespace ChuanLeMaClient
             builder.RegisterType<DownloadServiceImplSingleInstance>()
                 .As<Services.Inteface.IDownloadService>()
                 .SingleInstance();
+            #region 注册IConfiguartion
+            var env = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT")
+               ?? "Production";
+            var configuration = new ConfigurationBuilder()
+            .SetBasePath(AppContext.BaseDirectory)
+            .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
+            .AddJsonFile($"appsettings.{env}.json", optional: true, reloadOnChange: true)
+            //.AddEnvironmentVariables()
+            .Build();
+            builder.RegisterInstance(configuration).As<IConfiguration>().SingleInstance();
+            #endregion
+
             // 注册窗口
             builder.RegisterType<MainWindow>().AsSelf().SingleInstance();
 

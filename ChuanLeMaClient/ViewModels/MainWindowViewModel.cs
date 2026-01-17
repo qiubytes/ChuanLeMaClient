@@ -10,6 +10,7 @@ using ChuanLeMaClient.Services.Inteface;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using DynamicData;
+using Microsoft.Extensions.Configuration;
 using MsBox.Avalonia;
 using MsBox.Avalonia.Enums;
 using Splat;
@@ -40,6 +41,10 @@ namespace ChuanLeMaClient.ViewModels
         /// 下载服务
         /// </summary>
         private IDownloadService? _downloadService;
+        /// <summary>
+        /// 配置管理器
+        /// </summary>
+        private IConfiguration _configuration;
         /// <summary>
         /// 本地文件目录列表
         /// </summary>
@@ -131,7 +136,8 @@ namespace ChuanLeMaClient.ViewModels
             ILocalFolderFileService localFolderFileService,
             TaskWindowViewModel taskWindowViewModel,
             IUploadService uploadService,
-            IDownloadService downloadService
+            IDownloadService downloadService,
+            IConfiguration configuration
             )
         {
             _testService = testService;
@@ -139,6 +145,7 @@ namespace ChuanLeMaClient.ViewModels
             _taskWindowViewModel = taskWindowViewModel;
             _uploadService = uploadService;
             _downloadService = downloadService;
+            _configuration = configuration;
             // 延迟到UI线程空闲时初始化
             //Dispatcher.UIThread.Post(() =>
             //{
@@ -250,12 +257,12 @@ namespace ChuanLeMaClient.ViewModels
         /// <param name="info"></param>
         [RelayCommand]
         public void LinkOpenFolderRemote(FolderFileDataModel info)
-        { 
+        {
             _messageManager.Show(new AtomUI.Desktop.Controls.Message(
                                     type: MessageType.Success,
                                     content: "功能开发中...",
                                     expiration: TimeSpan.FromSeconds(1)
-                                  )); 
+                                  ));
         }
         /// <summary>
         /// 返回上级目录
@@ -307,7 +314,7 @@ namespace ChuanLeMaClient.ViewModels
                                     content: "登录中...",
                                     expiration: TimeSpan.FromSeconds(1)
                                 ));
-
+            string ServerUrl = _configuration["ServerUrl"];
             LoginButtonContent = "已登录";
         }
         [RelayCommand]
