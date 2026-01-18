@@ -1,3 +1,4 @@
 <Solution>
   <Project Path="ChuanLeMaClient/ChuanLeMaClient.csproj" />
+  <Project Path="ChuanLeMaClientTestProject/ChuanLeMaClientTestProject.csproj" Id="9440dc24-a477-4148-81e5-bc31752f1a4c" />
 </Solution>
