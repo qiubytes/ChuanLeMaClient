@@ -331,9 +331,21 @@ namespace ChuanLeMaClient.ViewModels
                                 ));
             //string ServerUrl = _configuration["ServerUrl"];
             LoginButtonContent = "已登录";
-            ResponseResult<List<FolderFileDataModel>> res = await _fileservice.FileDirList(this.RemoteWorkPath);
-            this.RemoteFolderDataList.Clear();
-            this.RemoteFolderDataList.AddRange(res.data);
+            try
+            {
+                ResponseResult<List<FolderFileDataModel>> res = await _fileservice.FileDirList(this.RemoteWorkPath);
+                this.RemoteFolderDataList.Clear();
+                this.RemoteFolderDataList.AddRange(res.data);
+            }
+            catch (Exception ex)
+            {
+                _messageManager?.Show(new AtomUI.Desktop.Controls.Message(
+                                  type: MessageType.Loading,
+                                  content: ex.ToString(),
+                                  expiration: TimeSpan.FromSeconds(10)
+                              ));
+            }
+           
         }
         [RelayCommand]
         public async void OpenTaskWindow()
