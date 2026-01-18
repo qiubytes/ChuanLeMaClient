@@ -7,6 +7,7 @@ using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Data.Core;
 using Avalonia.Data.Core.Plugins;
 using Avalonia.Markup.Xaml;
+using ChuanLeMaClient.Repository;
 using ChuanLeMaClient.Services.Implement;
 using ChuanLeMaClient.ViewModels;
 using ChuanLeMaClient.Views;
@@ -130,7 +131,11 @@ namespace ChuanLeMaClient
             //    Console.WriteLine($"  - {type.FullName}");
             //}
 
-            // 1. 注册所有 ServiceImpl
+            // 1. 注册所有 ServiceImpl 和 RepositoryImpl 类型
+            builder.RegisterAssemblyTypes(assembly)
+             .Where(t => t.Name.EndsWith("RepositoryImpl"))
+             .AsImplementedInterfaces()
+             .InstancePerLifetimeScope(); //在同一个生命周期作用域内是单例 
             builder.RegisterAssemblyTypes(assembly)
                    .Where(t => t.Name.EndsWith("ServiceImpl"))
                    .AsImplementedInterfaces()
@@ -142,6 +147,7 @@ namespace ChuanLeMaClient
             builder.RegisterType<DownloadServiceImplSingleInstance>()
                 .As<Services.Inteface.IDownloadService>()
                 .SingleInstance();
+            builder.RegisterType<SQLiteHelper>().AsSelf().SingleInstance();//注册数据库操作类 单例
             #region 注册IConfiguartion
             var env = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT")
                ?? "Production";

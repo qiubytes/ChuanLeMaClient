@@ -55,6 +55,5 @@
 
   <ItemGroup>
     <Folder Include="DB\" />
-    <Folder Include="Repository\Implement\" />
   </ItemGroup>
 </Project>

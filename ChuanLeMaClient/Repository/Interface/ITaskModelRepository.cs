@@ -8,5 +8,7 @@ namespace ChuanLeMaClient.Repository.Interface
 {
     public interface ITaskModelRepository
     {
+        public Task<List<Models.TaskModel>> GetAllTaskModelsAsync();
+        public Task<int> InsertTaskModelAsync(Models.TaskModel model);
     }
 }

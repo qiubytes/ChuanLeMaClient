@@ -16,6 +16,7 @@ namespace ChuanLeMaClient.Models
         public string TaskId { get; set; }
         public string LocalPath { get; set; }
         public string RemotePath { get; set; }
+        public string Direction { get; set; }
         /// <summary>
         /// 总大小
         /// </summary>
