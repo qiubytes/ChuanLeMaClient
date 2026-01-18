@@ -1,4 +1,5 @@
-﻿using ChuanLeMaClient.Repository;
+﻿using AtomUI.Desktop.Controls;
+using ChuanLeMaClient.Repository;
 using System.Data;
 using System.Threading.Tasks;
 
@@ -16,6 +17,20 @@ public class NUnitTaskModel
     {
         SQLiteHelper liteHelper = new SQLiteHelper();
         DataTable dt = await liteHelper.QueryAsync("select * from TaskModel;", new Microsoft.Data.Sqlite.SqliteParameter[] { });
-        Assert.Pass();
+        int i = await liteHelper.InsertAsync(@"
+                        insert into TaskModel
+                        (
+                         taskid, localpath, remotepath, filesize, status, completedsize
+                        ) values
+                              (
+                               '1',
+                               '2',
+                               '3',
+                               4,
+                               ""已完成"",
+                            4
+                              )
+                        ", null);
+        // Assert.Pass(); 
     }
 }
