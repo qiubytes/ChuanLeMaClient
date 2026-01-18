@@ -13,7 +13,7 @@ namespace ChuanLeMaClient.Models
     /// </summary> 
     public class FolderFileDataModel: ObservableObject
     {
-        [JsonPropertyName("name")]
+        [JsonPropertyName("name")] 
         public string Name { get; set; } = string.Empty;
         [JsonPropertyName("size")]
 
@@ -33,7 +33,10 @@ namespace ChuanLeMaClient.Models
     }
     public class TagInfo
     {
+        [JsonPropertyName("name")]
         public string Name { get; set; } = string.Empty;
+        [JsonPropertyName("color")]
+
         public string Color { get; set; } = string.Empty;
     }
 }

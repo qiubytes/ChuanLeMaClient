@@ -229,13 +229,14 @@
 								   IsHideOnSinglePage="True"
 								   VerticalAlignment="Stretch"
 								   HorizontalAlignment="Stretch"
-								   ItemsSource="{Binding LocalFolderDataList}"
+								   ItemsSource="{Binding RemoteFolderDataList}"
 								   HorizontalScrollBarVisibility="Visible"
-								   ColumnHeaderHeight="50"
+								   ColumnHeaderHeight="50" 
+								   CanUserResizeColumns="True"
 								   Grid.Row="1"
 								   >
 						<atom:DataGrid.Columns>
-							<atom:DataGridTemplateColumn Header="名称" Width="3*">
+							<atom:DataGridTemplateColumn Header="名称" Width="150">
 								<atom:DataGridTemplateColumn.CellTemplate>
 									<DataTemplate>
 										<atom:HyperLinkTextBlock Text="{Binding Name}" />
@@ -243,7 +244,7 @@
 								</atom:DataGridTemplateColumn.CellTemplate>
 							</atom:DataGridTemplateColumn>
 
-							<atom:DataGridTemplateColumn Header="类型" Width="Auto" >
+							<atom:DataGridTemplateColumn Header="类型" Width="80" >
 								<atom:DataGridTemplateColumn.CellTemplate>
 									<DataTemplate>
 										<ItemsControl ItemsSource="{Binding Tags}">
@@ -261,9 +262,9 @@
 									</DataTemplate>
 								</atom:DataGridTemplateColumn.CellTemplate>
 							</atom:DataGridTemplateColumn>
-							<atom:DataGridTextColumn Header="大小" Binding="{Binding,Converter={StaticResource FileSizeConverter}}" CanUserResize="True" Width="1*" />
+							<atom:DataGridTextColumn Header="大小" Width="100"  Binding="{Binding,Converter={StaticResource FileSizeConverter}}" CanUserResize="True"  />
 
-							<atom:DataGridTemplateColumn Header="操作" Width="Auto">
+							<atom:DataGridTemplateColumn Header="操作" Width="200">
 								<atom:DataGridTemplateColumn.CellTemplate>
 									<DataTemplate>
 										<StackPanel Orientation="Horizontal" Spacing="15">

@@ -4,6 +4,7 @@ using Avalonia.Controls;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Platform.Storage;
 using Avalonia.Threading;
+using ChuanLeMaClient.Dtos;
 using ChuanLeMaClient.Models;
 using ChuanLeMaClient.Services.Implement;
 using ChuanLeMaClient.Services.Inteface;
@@ -45,6 +46,7 @@ namespace ChuanLeMaClient.ViewModels
         /// 配置管理器
         /// </summary>
         private IConfiguration _configuration;
+        private IFileService _fileservice;
         /// <summary>
         /// 本地文件目录列表
         /// </summary>
@@ -68,6 +70,17 @@ namespace ChuanLeMaClient.ViewModels
         /// </summary>
         [ObservableProperty]
         public string loginButtonContent = "登录";
+        /// <summary>
+        /// 变更加载数据回调
+        /// </summary>
+        /// <param name="value"></param>
+        partial void OnLoginButtonContentChanged(string value)
+        {
+            if (value == "已登录")
+            {
+
+            }
+        }
         /// <summary>
         /// 由窗口调用 传入通知管理器
         /// </summary>
@@ -137,7 +150,8 @@ namespace ChuanLeMaClient.ViewModels
             TaskWindowViewModel taskWindowViewModel,
             IUploadService uploadService,
             IDownloadService downloadService,
-            IConfiguration configuration
+            IConfiguration configuration,
+            IFileService fileService
             )
         {
             _testService = testService;
@@ -146,6 +160,7 @@ namespace ChuanLeMaClient.ViewModels
             _uploadService = uploadService;
             _downloadService = downloadService;
             _configuration = configuration;
+            _fileservice = fileService;
             // 延迟到UI线程空闲时初始化
             //Dispatcher.UIThread.Post(() =>
             //{
@@ -302,7 +317,7 @@ namespace ChuanLeMaClient.ViewModels
             }
         }
         [RelayCommand]
-        public void Login()
+        public async void Login()
         {
             //_basicManager?.Show(new Notification(
             //    "温馨提示",
@@ -314,8 +329,11 @@ namespace ChuanLeMaClient.ViewModels
                                     content: "登录中...",
                                     expiration: TimeSpan.FromSeconds(1)
                                 ));
-            string ServerUrl = _configuration["ServerUrl"];
+            //string ServerUrl = _configuration["ServerUrl"];
             LoginButtonContent = "已登录";
+            ResponseResult<List<FolderFileDataModel>> res = await _fileservice.FileDirList(this.RemoteWorkPath);
+            this.RemoteFolderDataList.Clear();
+            this.RemoteFolderDataList.AddRange(res.data);
         }
         [RelayCommand]
         public async void OpenTaskWindow()
