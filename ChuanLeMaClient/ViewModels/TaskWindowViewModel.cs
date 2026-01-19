@@ -39,7 +39,7 @@ namespace ChuanLeMaClient.ViewModels
             //注册消息接收
             Messenger.Register<TaskWindowViewModel, UploadProgressMessage, string>(this, "uploadmsg", (r, m) =>
             {
-                Dispatcher.UIThread.Post(() =>
+                Dispatcher.UIThread.Post(async () =>
                 {
                     var task = UploadTasks.FirstOrDefault(t => t.TaskId == m.taskid);
                     if (task != null)
@@ -50,13 +50,23 @@ namespace ChuanLeMaClient.ViewModels
                         //var index = UploadTasks.IndexOf(task);
                         //UploadTasks[index] = task; // 触发集合变更通知
                     }
+                    else
+                    {
+                        await LoadedAsync();
+                        task = UploadTasks.FirstOrDefault(t => t.TaskId == m.taskid);
+                        if (task != null)
+                        {
+                            task.CompletedSize = Convert.ToInt64(m.progress / 100.0 * task.FileSize);
+                            task.Status = m.progress >= 100 ? "已完成" : "进行中";
+                        }
+                    }
                 });
 
             });
 
             Messenger.Register<TaskWindowViewModel, DownloadProgressMessage, string>(this, "downloadmsg", (r, m) =>
             {
-                Dispatcher.UIThread.Post(() =>
+                Dispatcher.UIThread.Post(async () =>
                 {
                     var task = DownloadTasks.FirstOrDefault(t => t.TaskId == m.taskid);
                     if (task != null)
@@ -67,17 +77,39 @@ namespace ChuanLeMaClient.ViewModels
                         //var index = UploadTasks.IndexOf(task);
                         //UploadTasks[index] = task; // 触发集合变更通知
                     }
+                    else
+                    {
+                        await LoadedAsync();
+                        task = UploadTasks.FirstOrDefault(t => t.TaskId == m.taskid);
+                        if (task != null)
+                        {
+                            task.CompletedSize = Convert.ToInt64(m.progress / 100.0 * task.FileSize);
+                            task.Status = m.progress >= 100 ? "已完成" : "进行中";
+                        }
+                    }
                 });
 
             });
         }
 
         private IFileService _fileService;
+        /// <summary>
+        /// 窗口的Loaded事件处理程序
+        /// </summary>
+        /// <returns></returns>
+        public async Task LoadedAsync()
+        {
+            List<TaskModel> tasks = await _fileService.GetAllTaskModelsAsync();
+            DownloadTasks = new ObservableCollection<TaskModel>(tasks.Where(t => t.Direction == "下载"));
+        }
+
         public TaskWindowViewModel(IFileService fileService)
         {
             _fileService = fileService;
             //接收消息
             IsActive = true;
+            //  InitializeAsync();
+
             //downloadTasks.Add();
             UploadTasks.AddRange(
                 new List<TaskModel>

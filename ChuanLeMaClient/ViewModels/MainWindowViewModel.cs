@@ -22,7 +22,7 @@ using System.Threading.Tasks;
 
 namespace ChuanLeMaClient.ViewModels
 {
-    public partial class MainWindowViewModel : ViewModelBase
+    public partial class MainWindowViewModel : ObservableRecipient // ViewModelBase
     {
         /// <summary>
         /// Notification 通知提醒
@@ -141,6 +141,21 @@ namespace ChuanLeMaClient.ViewModels
 
         }
         /// <summary>
+        /// 注册要接收的消息
+        /// </summary>
+        protected override void OnActivated()
+        {
+            Messenger.Register<MainWindowViewModel, DownloadCompletedMessage, string>(this, "downloadmsg", (r, m) =>
+            {
+                Dispatcher.UIThread.Post(async () =>
+                {
+                    //下载完成后，刷新本地文件列表
+                    this.LoadLocalFolderFiles();
+                });
+
+            });
+        }
+        /// <summary>
         /// autofac 默认使用 可解析参数数量最多的构造函数
         /// </summary>
         /// <param name="testService"></param>
@@ -161,6 +176,9 @@ namespace ChuanLeMaClient.ViewModels
             _downloadService = downloadService;
             _configuration = configuration;
             _fileservice = fileService;
+
+            // 激活消息接收
+            IsActive = true;
             // 延迟到UI线程空闲时初始化
             //Dispatcher.UIThread.Post(() =>
             //{

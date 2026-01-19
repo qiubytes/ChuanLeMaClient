@@ -44,7 +44,7 @@ namespace ChuanLeMaClient.Services.Implement
         {
             HttpClient _httpClient = new HttpClient();
 
-            var jsonobj = new FileDownloadRequestDto { filepath = "qdrant-x86_64-pc-windows-msvc.zip" };
+            var jsonobj = new FileDownloadRequestDto { filepath = remotefilepath };
             // 发送POST请求并获取响应流
             using var response = await _httpClient.PostAsync("http://localhost:5210/File/downloadfile", JsonContent.Create(jsonobj));
             response.EnsureSuccessStatusCode();
@@ -53,7 +53,7 @@ namespace ChuanLeMaClient.Services.Implement
             using var stream = await response.Content.ReadAsStreamAsync();
 
             // 创建文件流
-            using var fileStream = new FileStream(Path.GetDirectoryName(localfilepath) + "/xxx.zip", FileMode.Create, FileAccess.Write, FileShare.None);
+            using var fileStream = new FileStream(localfilepath, FileMode.Create, FileAccess.Write, FileShare.None);
 
             // 缓冲区大小（可以根据需要调整）
             var buffer = new byte[81920]; // 80KB
@@ -69,7 +69,8 @@ namespace ChuanLeMaClient.Services.Implement
                 // 可以添加进度报告（可选）
                 // ReportProgress(fileStream.Position, response.Content.Headers.ContentLength);
             }
-
+            //发送下载完成消息
+            WeakReferenceMessenger.Default.Send(new DownloadCompletedMessage(taskid, localfilepath, remotefilepath), "downloadmsg");
             //while (true)
             //{
             //    // 模拟上传过程

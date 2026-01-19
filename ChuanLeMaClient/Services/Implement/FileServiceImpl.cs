@@ -27,6 +27,12 @@ namespace ChuanLeMaClient.Services.Implement
             ResponseResult<List<FolderFileDataModel>> res = await client.PostRequest<FileListRequestDto, ResponseResult<List<FolderFileDataModel>>>("/File/FileDirList", new FileListRequestDto() { workpath = workpath });
             return res;
         }
+
+        public async Task<List<TaskModel>> GetAllTaskModelsAsync()
+        {
+            return await _taskModelRepository.GetAllTaskModelsAsync();
+        }
+
         /// <summary>
         /// 新增任务记录
         /// </summary>

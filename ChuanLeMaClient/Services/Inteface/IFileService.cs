@@ -12,5 +12,6 @@ namespace ChuanLeMaClient.Services.Inteface
     {
         public Task<ResponseResult<List<FolderFileDataModel>>> FileDirList(string workpath);
         public Task<int> InsertTaskModelAsync(Models.TaskModel model);
+        public Task<List<Models.TaskModel>> GetAllTaskModelsAsync();
     }
 }
