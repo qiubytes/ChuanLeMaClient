@@ -1,4 +1,5 @@
-﻿using ChuanLeMaClient.Dtos;
+﻿using AtomUI.Icons.IconPark;
+using ChuanLeMaClient.Dtos;
 using ChuanLeMaClient.Models;
 using ChuanLeMaClient.Services.Inteface;
 using CommunityToolkit.Mvvm.ComponentModel;
@@ -17,13 +18,26 @@ namespace ChuanLeMaClient.Services.Implement
 {
     public class DownloadServiceImplSingleInstance : ObservableRecipient, IDownloadService
     {
-        public DownloadServiceImplSingleInstance()
+        private readonly IFileService _fileService;
+        public DownloadServiceImplSingleInstance(IFileService fileService)
         {
             IsActive = true;
+            _fileService = fileService;
         }
-        public void AddTask(string localfilepath, string remotefilepath, string token)
+        public void AddTask(FolderFileDataModel filemodel, string localfilepath, string remotefilepath, string token)
         {
-            string taskid = "3";
+            string taskid = Guid.NewGuid().ToString();
+            Models.TaskModel taskModel = new Models.TaskModel
+            {
+                TaskId = taskid,
+                LocalPath = localfilepath,
+                RemotePath = remotefilepath,
+                Direction = "下载",
+                Status = "进行中",
+                CompletedSize = 0,
+                FileSize = filemodel.Size
+            };
+            _fileService.InsertTaskModelAsync(taskModel);
             Task.Factory.StartNew(async () => Download(localfilepath, remotefilepath, token, taskid));
         }
         public async Task Download(string localfilepath, string remotefilepath, string token, string taskid)
@@ -39,7 +53,7 @@ namespace ChuanLeMaClient.Services.Implement
             using var stream = await response.Content.ReadAsStreamAsync();
 
             // 创建文件流
-            using var fileStream = new FileStream(Path.GetDirectoryName(localfilepath)+"/xxx.zip", FileMode.Create, FileAccess.Write, FileShare.None);
+            using var fileStream = new FileStream(Path.GetDirectoryName(localfilepath) + "/xxx.zip", FileMode.Create, FileAccess.Write, FileShare.None);
 
             // 缓冲区大小（可以根据需要调整）
             var buffer = new byte[81920]; // 80KB

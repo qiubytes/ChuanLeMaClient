@@ -1,5 +1,6 @@
 ﻿using Avalonia.Threading;
 using ChuanLeMaClient.Models;
+using ChuanLeMaClient.Services.Inteface;
 using CommunityToolkit.Mvvm.ComponentModel;
 using DynamicData;
 using System;
@@ -71,21 +72,13 @@ namespace ChuanLeMaClient.ViewModels
             });
         }
 
-        public TaskWindowViewModel()
+        private IFileService _fileService;
+        public TaskWindowViewModel(IFileService fileService)
         {
+            _fileService = fileService;
             //接收消息
             IsActive = true;
-            downloadTasks.Add(
-                new TaskModel
-                {
-                    TaskId = "3",
-                    LocalPath = "C:\\Files\\fileA.txt",
-                    RemotePath = "/remote/fileA.txt",
-                    FileSize = 1024,
-                    CompletedSize = 512,
-                    Status = "进行中"
-                }
-                );
+            //downloadTasks.Add();
             UploadTasks.AddRange(
                 new List<TaskModel>
                 {

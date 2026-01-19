@@ -271,7 +271,7 @@
 											<StackPanel.ContextMenu>
 												<ContextMenu>
 													<MenuItem Header="下载"
-															  Command="{Binding DataContext.UploadLinkCommand,
+															  Command="{Binding DataContext.DownloadLinkCommand,
 															  ElementName=MainWindowControl}"
 															  CommandParameter="{Binding}" />
 												</ContextMenu>

@@ -222,7 +222,8 @@ namespace ChuanLeMaClient.ViewModels
             //    "温馨提示",
             //    $"上传成功!{info.Name}"
             //));
-            _downloadService?.AddTask(System.IO.Path.Combine(LocalWorkPath, info.Name), "test", "token");
+            _downloadService?.AddTask(info, System.IO.Path.Combine(LocalWorkPath, info.Name), RemoteWorkPath + info.Name, "token");
+
         }
         /// <summary>
         /// 打开文件夹选择对话框
@@ -345,7 +346,7 @@ namespace ChuanLeMaClient.ViewModels
                                   expiration: TimeSpan.FromSeconds(10)
                               ));
             }
-           
+
         }
         [RelayCommand]
         public async void OpenTaskWindow()
