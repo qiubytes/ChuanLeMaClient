@@ -4,6 +4,7 @@ using ChuanLeMaClient.Models;
 using ChuanLeMaClient.Services.Inteface;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Messaging;
+using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -19,10 +20,12 @@ namespace ChuanLeMaClient.Services.Implement
     public class DownloadServiceImplSingleInstance : ObservableRecipient, IDownloadService
     {
         private readonly IFileService _fileService;
-        public DownloadServiceImplSingleInstance(IFileService fileService)
+        private readonly IConfiguration _configuration;
+        public DownloadServiceImplSingleInstance(IFileService fileService, IConfiguration configuration)
         {
             IsActive = true;
             _fileService = fileService;
+            _configuration = configuration;
         }
         public void AddTask(FolderFileDataModel filemodel, string localfilepath, string remotefilepath, string token)
         {
@@ -42,11 +45,12 @@ namespace ChuanLeMaClient.Services.Implement
         }
         public async Task Download(string localfilepath, string remotefilepath, string token, string taskid)
         {
+            string ServerUrl = _configuration["ServerUrl"];
             HttpClient _httpClient = new HttpClient();
 
             var jsonobj = new FileDownloadRequestDto { filepath = remotefilepath };
             // 发送POST请求并获取响应流
-            using var response = await _httpClient.PostAsync("http://localhost:5210/File/downloadfile", JsonContent.Create(jsonobj));
+            using var response = await _httpClient.PostAsync($"{ServerUrl}/File/downloadfile", JsonContent.Create(jsonobj));
             response.EnsureSuccessStatusCode();
 
             // 获取响应流
