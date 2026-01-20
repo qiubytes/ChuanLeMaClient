@@ -63,12 +63,16 @@ namespace ChuanLeMaClient.Services.Implement
             var buffer = new byte[81920]; // 80KB
             int bytesRead;
 
+            TaskModel taskModel = await _fileService.GetModel(taskid);
             // 循环读取并写入文件
             while ((bytesRead = await stream.ReadAsync(buffer)) > 0)
             {
                 await fileStream.WriteAsync(buffer.AsMemory(0, bytesRead));
                 int progress = Convert.ToInt32((float)stream.Position / (float)stream.Length * 100);
                 WeakReferenceMessenger.Default.Send(new DownloadProgressMessage(taskid, localfilepath, remotefilepath, progress), "downloadmsg");
+                //更新数据库已完成大小
+                taskModel.CompletedSize = fileStream.Position;
+                await _fileService.UpdateTaskModelAsync(taskModel);
                 //Task.Delay(1000).Wait(); // 模拟上传延迟
                 // 可以添加进度报告（可选）
                 // ReportProgress(fileStream.Position, response.Content.Headers.ContentLength);

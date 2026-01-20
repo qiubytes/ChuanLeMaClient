@@ -41,6 +41,35 @@ namespace ChuanLeMaClient.Repository.Implement
             }
             return list;
         }
+
+        public async Task<TaskModel> GetModel(string TaskId)
+        {
+            string sql = "SELECT * FROM TaskModel WHERE TaskId = @TaskId";
+            Microsoft.Data.Sqlite.SqliteParameter[] parameters = new Microsoft.Data.Sqlite.SqliteParameter[]
+            {
+                new Microsoft.Data.Sqlite.SqliteParameter("@TaskId", TaskId)
+            };
+            DataTable task = await _sqliteHelper.QueryAsync(sql, new Microsoft.Data.Sqlite.SqliteParameter[] {
+             new Microsoft.Data.Sqlite.SqliteParameter("@TaskId", TaskId)
+            });
+            if (task.Rows.Count > 0)
+            {
+                DataRow row = task.Rows[0];
+                TaskModel model = new TaskModel
+                {
+                    TaskId = (row["TaskId"]).ToString(),
+                    LocalPath = row["LocalPath"].ToString(),
+                    RemotePath = row["RemotePath"].ToString(),
+                    FileSize = Convert.ToInt64(row["FileSize"]),
+                    Status = row["Status"].ToString(),
+                    CompletedSize = Convert.ToInt64(row["CompletedSize"]),
+                    Direction = row["Direction"].ToString()
+                };
+                return model;
+            }
+            return null;
+        }
+
         /// <summary>
         /// 插入数据
         /// </summary>
@@ -62,6 +91,23 @@ namespace ChuanLeMaClient.Repository.Implement
                 new Microsoft.Data.Sqlite.SqliteParameter("@Direction", model.Direction)
             };
             return await _sqliteHelper.InsertAsync(sql, parameters);
+        }
+
+        public Task<int> UpdateTaskModelAsync(TaskModel model)
+        {
+            string sql = "UPDATE TaskModel SET LocalPath = @LocalPath, RemotePath = @RemotePath, FileSize = @FileSize, " +
+              "Status = @Status, CompletedSize = @CompletedSize, Direction = @Direction WHERE TaskId = @TaskId";
+            Microsoft.Data.Sqlite.SqliteParameter[] parameters = new Microsoft.Data.Sqlite.SqliteParameter[]
+            {
+                new Microsoft.Data.Sqlite.SqliteParameter("@LocalPath", model.LocalPath),
+                new Microsoft.Data.Sqlite.SqliteParameter("@RemotePath", model.RemotePath),
+                new Microsoft.Data.Sqlite.SqliteParameter("@FileSize", model.FileSize),
+                new Microsoft.Data.Sqlite.SqliteParameter("@Status", model.Status),
+                new Microsoft.Data.Sqlite.SqliteParameter("@CompletedSize", model.CompletedSize),
+                new Microsoft.Data.Sqlite.SqliteParameter("@Direction", model.Direction),
+                new Microsoft.Data.Sqlite.SqliteParameter("@TaskId", model.TaskId)
+            };
+            return _sqliteHelper.UpdateAsync(sql, parameters);
         }
     }
 }

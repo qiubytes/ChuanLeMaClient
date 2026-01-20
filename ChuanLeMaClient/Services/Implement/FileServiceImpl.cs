@@ -43,5 +43,13 @@ namespace ChuanLeMaClient.Services.Implement
             return await _taskModelRepository.InsertTaskModelAsync(model);
         }
 
+        public async Task<int> UpdateTaskModelAsync(TaskModel model)
+        {
+            return await _taskModelRepository.UpdateTaskModelAsync(model);
+        }
+        public async Task<TaskModel> GetModel(string TaskId)
+        {
+            return await _taskModelRepository.GetModel(TaskId);
+        }
     }
 }
