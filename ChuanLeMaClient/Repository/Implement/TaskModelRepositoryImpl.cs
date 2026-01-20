@@ -90,7 +90,7 @@ namespace ChuanLeMaClient.Repository.Implement
                 new Microsoft.Data.Sqlite.SqliteParameter("@CompletedSize", model.CompletedSize),
                 new Microsoft.Data.Sqlite.SqliteParameter("@Direction", model.Direction)
             };
-            return await _sqliteHelper.InsertAsync(sql, parameters);
+            return await _sqliteHelper.ExecuteNonQueryAsync(sql, parameters);
         }
 
         public Task<int> UpdateTaskModelAsync(TaskModel model)
@@ -107,7 +107,7 @@ namespace ChuanLeMaClient.Repository.Implement
                 new Microsoft.Data.Sqlite.SqliteParameter("@Direction", model.Direction),
                 new Microsoft.Data.Sqlite.SqliteParameter("@TaskId", model.TaskId)
             };
-            return _sqliteHelper.UpdateAsync(sql, parameters);
+            return _sqliteHelper.ExecuteNonQueryAsync(sql, parameters);
         }
     }
 }
