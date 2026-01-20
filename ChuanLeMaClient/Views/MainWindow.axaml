@@ -98,10 +98,10 @@
 					<ColumnDefinition Width="1*"/>
 				</Grid.ColumnDefinitions>
 				<Grid  Grid.Column="0"  >
-
 					<Grid.RowDefinitions>
 						<RowDefinition Height="Auto"/>
-						<RowDefinition Height="*"/>
+						<RowDefinition Height="*"/> 
+
 					</Grid.RowDefinitions>
 					<Grid Grid.Row="0" ColumnSpacing="12">
 						<Grid.ColumnDefinitions>
@@ -191,14 +191,18 @@
 																	 Command="{Binding DataContext.UploadLinkCommand,
 																	 ElementName=MainWindowControl}"
 																	 CommandParameter="{Binding}" />
-											<atom:HyperLinkTextBlock Text="删除" />
+											<atom:HyperLinkTextBlock Text="删除"
+																	 Command="{Binding DataContext.DeleteLinkCommand,
+																	 ElementName=MainWindowControl}"
+																	 CommandParameter="{Binding}"/>
 
 										</StackPanel>
 									</DataTemplate>
 								</atom:DataGridTemplateColumn.CellTemplate>
 							</atom:DataGridTemplateColumn>
 						</atom:DataGrid.Columns>
-					</atom:DataGrid>
+					</atom:DataGrid> 
+				 
 				</Grid>
 				<!--
 
@@ -231,7 +235,7 @@
 								   HorizontalAlignment="Stretch"
 								   ItemsSource="{Binding RemoteFolderDataList}"
 								   HorizontalScrollBarVisibility="Visible"
-								   ColumnHeaderHeight="50" 
+								   ColumnHeaderHeight="50"
 								   CanUserResizeColumns="True"
 								   Grid.Row="1"
 								   >

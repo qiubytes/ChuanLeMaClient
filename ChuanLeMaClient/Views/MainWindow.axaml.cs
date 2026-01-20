@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace ChuanLeMaClient.Views
 {
-    public partial class MainWindow : Window
+    public partial class MainWindow : AtomUI.Desktop.Controls.Window
     {
         public MainWindow()
         {

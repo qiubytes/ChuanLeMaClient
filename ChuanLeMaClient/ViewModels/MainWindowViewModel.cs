@@ -2,6 +2,7 @@
 using AtomUI.Icons.IconPark;
 using Avalonia.Controls;
 using Avalonia.Controls.ApplicationLifetimes;
+using Avalonia.Layout;
 using Avalonia.Platform.Storage;
 using Avalonia.Threading;
 using ChuanLeMaClient.Dtos;
@@ -12,12 +13,15 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using DynamicData;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
 using MsBox.Avalonia;
 using MsBox.Avalonia.Enums;
+using Serilog;
 using Splat;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.IO;
 using System.Threading.Tasks;
 
 namespace ChuanLeMaClient.ViewModels
@@ -47,6 +51,7 @@ namespace ChuanLeMaClient.ViewModels
         /// </summary>
         private IConfiguration _configuration;
         private IFileService _fileservice;
+        private ILogger<MainWindowViewModel> _logger;
         /// <summary>
         /// 本地文件目录列表
         /// </summary>
@@ -65,6 +70,12 @@ namespace ChuanLeMaClient.ViewModels
         /// 远程工作目录
         /// </summary>
         [ObservableProperty] public string remoteWorkPath = "/";
+        /// <summary>
+        /// 开启删除确认对话框
+        /// </summary>
+        [ObservableProperty]
+
+        public bool isDeleteConfirmMsgBoxOpened = false;
         /// <summary>
         /// 登录按钮内容
         /// </summary>
@@ -166,7 +177,8 @@ namespace ChuanLeMaClient.ViewModels
             IUploadService uploadService,
             IDownloadService downloadService,
             IConfiguration configuration,
-            IFileService fileService
+            IFileService fileService,
+            ILogger<MainWindowViewModel> logger
             )
         {
             _testService = testService;
@@ -176,7 +188,7 @@ namespace ChuanLeMaClient.ViewModels
             _downloadService = downloadService;
             _configuration = configuration;
             _fileservice = fileService;
-
+            _logger = logger;
             // 激活消息接收
             IsActive = true;
             // 延迟到UI线程空闲时初始化
@@ -232,6 +244,68 @@ namespace ChuanLeMaClient.ViewModels
             //    $"上传成功!{info.Name}"
             //));
             _uploadService?.AddTask(System.IO.Path.Combine(LocalWorkPath, info.Name), "test", "token");
+        }
+        [RelayCommand]
+        public async Task DeleteLink(FolderFileDataModel info)
+        {
+            if (info.IsFolder) return;
+            //_basicManager?.Show(new Notification(
+            //    "温馨提示",
+            //    $"上传成功!{info.Name}"
+            //));
+            //_uploadService?.AddTask(System.IO.Path.Combine(LocalWorkPath, info.Name), "test", "token");
+            if (Avalonia.Application.Current?.ApplicationLifetime is ClassicDesktopStyleApplicationLifetime life)
+            {
+                var window = life.MainWindow;
+                if (window != null && !window.IsActive)
+                {
+                    return;
+                }
+                IsDeleteConfirmMsgBoxOpened = true;
+                //await Dispatcher.UIThread.InvokeAsync(() => { }, DispatcherPriority.Background);
+                var content = () =>
+                {
+                    var stackPanel = new StackPanel
+                    {
+                        Orientation = Orientation.Vertical,
+                        Spacing = 5
+                    };
+                    stackPanel.Children.Add(new AtomUI.Desktop.Controls.TextBlock
+                    {
+                        Text = $"是否确认删除文件：{info.Name}"
+                    });
+                    //stackPanel.Children.Add(new AtomUI.Desktop.Controls.TextBlock
+                    //{
+                    //    Text = "some messages...some messages..."
+                    //});
+                    return stackPanel;
+                };
+                var options = new MessageBoxOptions()
+                {
+                    Title = "文件删除确认",
+                    IsDragMovable = true,
+                    IsCenterOnStartup = true,
+                    Style = MessageBoxStyle.Confirm
+                };
+                //window 应该继承  AtomUI.Desktop.Controls.Window
+                var code = await MessageBox.ShowMessageModalAsync(content(), null, options, topLevel: window);
+                if (code is AtomUI.Desktop.Controls.DialogCode re)
+                {
+                    if (re == AtomUI.Desktop.Controls.DialogCode.Accepted)
+                    {
+                        string fullpath = Path.Combine(LocalWorkPath, info.Name);
+                        if (File.Exists(fullpath))
+                        {
+                            File.Delete(fullpath);
+                            _logger.LogInformation("删除文件" + fullpath);
+                            LoadLocalFolderFiles();
+
+                        }
+                    }
+                }
+
+            }
+
         }
         [RelayCommand]
         public void DownloadLink(FolderFileDataModel info)
