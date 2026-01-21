@@ -101,6 +101,7 @@ namespace ChuanLeMaClient.ViewModels
         {
             List<TaskModel> tasks = await _fileService.GetAllTaskModelsAsync();
             DownloadTasks = new ObservableCollection<TaskModel>(tasks.Where(t => t.Direction == "下载"));
+            UploadTasks = new ObservableCollection<TaskModel>(tasks.Where(t => t.Direction == "上传"));
         }
 
         public TaskWindowViewModel(IFileService fileService)
@@ -111,119 +112,20 @@ namespace ChuanLeMaClient.ViewModels
             //  InitializeAsync();
 
             //downloadTasks.Add();
-            UploadTasks.AddRange(
-                new List<TaskModel>
-                {
-                    new TaskModel
-                    {
-                        TaskId = "1",
-                        LocalPath = "C:\\Files\\file1.txt",
-                        RemotePath = "/remote/file1.txt",
-                        FileSize = 2048,
-                        CompletedSize = 1024,
-                        Status = "进行中"
-                    },
-                    new TaskModel
-                    {
-                        TaskId = "2",
-                        LocalPath = "C:\\Files\\file2.txt",
-                        RemotePath = "/remote/file2.txt",
-                        FileSize = 4096,
-                        CompletedSize = 0,
-                        Status = "已完成"
-                    },
-                    new TaskModel
-                    {
-                        TaskId = "3",
-                        LocalPath = "C:\\Files\\file3.txt",
-                        RemotePath = "/remote/file3.txt",
-                        FileSize = 8192,
-                        CompletedSize = 2048,
-                        Status = "暂停"
-                    },
-                      new TaskModel
-                    {
-                        TaskId = "4",
-                        LocalPath = "C:\\Files\\file1.txt",
-                        RemotePath = "/remote/file1.txt",
-                        FileSize = 2048,
-                        CompletedSize = 1024,
-                        Status = "进行中"
-                    },
-                    new TaskModel
-                    {
-                        TaskId = "5",
-                        LocalPath = "C:\\Files\\file2.txt",
-                        RemotePath = "/remote/file2.txt",
-                        FileSize = 4096,
-                        CompletedSize = 4096,
-                        Status = "已完成"
-                    },
-                    new TaskModel
-                    {
-                        TaskId = "6",
-                        LocalPath = "C:\\Files\\file3.txt",
-                        RemotePath = "/remote/file3.txt",
-                        FileSize = 8192,
-                        CompletedSize = 2048,
-                        Status = "暂停"
-                    },
-                      new TaskModel
-                    {
-                        TaskId = "1",
-                        LocalPath = "C:\\Files\\file1.txt",
-                        RemotePath = "/remote/file1.txt",
-                        FileSize = 2048,
-                        CompletedSize = 1024,
-                        Status = "进行中"
-                    },
-                    new TaskModel
-                    {
-                        TaskId = "2",
-                        LocalPath = "C:\\Files\\file2.txt",
-                        RemotePath = "/remote/file2.txt",
-                        FileSize = 4096,
-                        CompletedSize = 4096,
-                        Status = "已完成"
-                    },
-                    new TaskModel
-                    {
-                        TaskId = "3",
-                        LocalPath = "C:\\Files\\file3.txt",
-                        RemotePath = "/remote/file3.txt",
-                        FileSize = 8192,
-                        CompletedSize = 2048,
-                        Status = "暂停"
-                    },
-                      new TaskModel
-                    {
-                        TaskId = "4",
-                        LocalPath = "C:\\Files\\file1.txt",
-                        RemotePath = "/remote/file1.txt",
-                        FileSize = 2048,
-                        CompletedSize = 1024,
-                        Status = "进行中"
-                    },
-                    new TaskModel
-                    {
-                        TaskId = "5",
-                        LocalPath = "C:\\Files\\file2.txt",
-                        RemotePath = "/remote/file2.txt",
-                        FileSize = 4096,
-                        CompletedSize = 4096,
-                        Status = "已完成"
-                    },
-                    new TaskModel
-                    {
-                        TaskId = "6",
-                        LocalPath = "C:\\Files\\file3.txt",
-                        RemotePath = "/remote/file3.txt",
-                        FileSize = 8192,
-                        CompletedSize = 2048,
-                        Status = "暂停"
-                    }
-                }
-                );
+            //UploadTasks.AddRange(
+            //    new List<TaskModel>
+            //    { 
+            //        new TaskModel
+            //        {
+            //            TaskId = "6",
+            //            LocalPath = "C:\\Files\\file3.txt",
+            //            RemotePath = "/remote/file3.txt",
+            //            FileSize = 8192,
+            //            CompletedSize = 2048,
+            //            Status = "暂停"
+            //        }
+            //    }
+            //    );
         }
     }
 }
