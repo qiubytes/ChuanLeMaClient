@@ -243,7 +243,7 @@ namespace ChuanLeMaClient.ViewModels
             //    "温馨提示",
             //    $"上传成功!{info.Name}"
             //));
-            _uploadService?.AddTask(System.IO.Path.Combine(LocalWorkPath, info.Name), "test", "token");
+            _uploadService?.AddTask(info, System.IO.Path.Combine(LocalWorkPath, info.Name), RemoteWorkPath, "token");
         }
         [RelayCommand]
         public async Task DeleteLink(FolderFileDataModel info)

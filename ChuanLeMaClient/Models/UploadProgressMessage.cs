@@ -13,6 +13,6 @@ namespace ChuanLeMaClient.Models
     /// <param name="localfilepath"></param>
     /// <param name="remotefilepath"></param>
     /// <param name="progress"></param>
-    public record UploadProgressMessage(string taskid, string localfilepath, string remotefilepath, int progress);
+    public record UploadProgressMessage(string taskid, string localfilepath, string remotefilepath, long progress);
 
 }

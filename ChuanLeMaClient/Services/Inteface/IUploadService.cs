@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ChuanLeMaClient.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -14,6 +15,6 @@ namespace ChuanLeMaClient.Services.Inteface
         /// <param name="localfilepath"></param>
         /// <param name="remotefilepath"></param>
         /// <param name="token"></param>
-        public void AddTask(string localfilepath, string remotefilepath, string token);
+        public void AddTask(FolderFileDataModel filemodel, string localfilepath, string remotefilepath, string token);
     }
 }
