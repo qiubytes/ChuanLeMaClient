@@ -46,11 +46,23 @@ namespace ChuanLeMaClient.Services.Implement
         public async Task Download(string localfilepath, string remotefilepath, string token, string taskid)
         {
             string ServerUrl = _configuration["ServerUrl"];
-            HttpClient _httpClient = new HttpClient();
+            using HttpClient _httpClient = new HttpClient();
 
             var jsonobj = new FileDownloadRequestDto { filepath = remotefilepath };
             // 发送POST请求并获取响应流
-            using var response = await _httpClient.PostAsync($"{ServerUrl}/File/downloadfile", JsonContent.Create(jsonobj));
+            // using var response = await _httpClient.PostAsync($"{ServerUrl}/File/downloadfile", JsonContent.Create(jsonobj));
+            // response.EnsureSuccessStatusCode();
+
+            // // 获取响应流
+            // using var stream = await response.Content.ReadAsStreamAsync();
+
+            // 修改这一行：使用 SendAsync 而不是 PostAsync，并指定 HttpCompletionOption.ResponseHeadersRead
+            var request = new HttpRequestMessage(HttpMethod.Post, $"{ServerUrl}/File/downloadfile")
+            {
+                Content = JsonContent.Create(jsonobj)
+            };
+
+            using var response = await _httpClient.SendAsync(request, HttpCompletionOption.ResponseHeadersRead);
             response.EnsureSuccessStatusCode();
 
             // 获取响应流
@@ -62,13 +74,16 @@ namespace ChuanLeMaClient.Services.Implement
             // 缓冲区大小（可以根据需要调整）
             var buffer = new byte[81920]; // 80KB
             int bytesRead;
-
+            long downloadedBytes = 0;
+            long? totalBytes = response.Content.Headers.ContentLength;
             TaskModel taskModel = await _fileService.GetModel(taskid);
             // 循环读取并写入文件
             while ((bytesRead = await stream.ReadAsync(buffer)) > 0)
             {
                 await fileStream.WriteAsync(buffer.AsMemory(0, bytesRead));
-                int progress = Convert.ToInt32((float)stream.Position / (float)stream.Length * 100);
+                downloadedBytes += bytesRead;
+
+                int progress = Convert.ToInt32((double)downloadedBytes / (double)totalBytes * 100);
                 WeakReferenceMessenger.Default.Send(new DownloadProgressMessage(taskid, localfilepath, remotefilepath, progress), "downloadmsg");
                 //更新数据库已完成大小
                 taskModel.CompletedSize = fileStream.Position;
@@ -90,6 +105,11 @@ namespace ChuanLeMaClient.Services.Implement
             //    }
             //    break; // 上传完成后跳出循环
             //}
+            // 修改3：增强版垃圾回收
+            await Task.Delay(200); // 给系统处理时间
+            GC.Collect(GC.MaxGeneration, GCCollectionMode.Forced, true, true);
+            GC.WaitForPendingFinalizers();
+            GC.Collect(GC.MaxGeneration, GCCollectionMode.Forced, true, true);
         }
     }
 }
