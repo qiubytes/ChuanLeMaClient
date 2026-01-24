@@ -51,5 +51,11 @@ namespace ChuanLeMaClient.Services.Implement
         {
             return await _taskModelRepository.GetModel(TaskId);
         }
+
+        public async Task<int> GetDoingTaskCount()
+        {
+            List<Models.TaskModel> tasks = await _taskModelRepository.GetAllTaskModelsAsync();
+            return tasks.Where(t => t.Status == "进行中").Count();
+        }
     }
 }

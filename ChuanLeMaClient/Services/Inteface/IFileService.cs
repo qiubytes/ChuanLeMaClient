@@ -15,5 +15,10 @@ namespace ChuanLeMaClient.Services.Inteface
         public Task<List<Models.TaskModel>> GetAllTaskModelsAsync();
         public Task<int> UpdateTaskModelAsync(Models.TaskModel model);
         public Task<TaskModel> GetModel(string TaskId);
+        /// <summary>
+        /// 正在进行中的任务数量
+        /// </summary>
+        /// <returns></returns>
+        public Task<int> GetDoingTaskCount();
     }
 }

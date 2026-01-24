@@ -80,7 +80,7 @@ namespace ChuanLeMaClient.Services.Implement
                 });
 
                 var streamContent = new StreamContent(progressStream);
-              
+
                 //streamContent.Headers.ContentType = MediaTypeHeaderValue.Parse("application/octet-stream");
                 content.Add(streamContent, "File", System.IO.Path.GetFileName(localfilepath));
 
@@ -91,13 +91,18 @@ namespace ChuanLeMaClient.Services.Implement
 
                 using var response = await _httpClient.SendAsync(request, HttpCompletionOption.ResponseHeadersRead);
                 response.EnsureSuccessStatusCode();
+                taskModel.Status = "已完成";
+                await _fileService.UpdateTaskModelAsync(taskModel);
+                //发送上传完成消息
+                WeakReferenceMessenger.Default.Send(new UploadCompletedMessage(taskid, localfilepath, remotefilepath), "uploadmsg");
+               
             }
             catch (Exception ex)
             {
 
                 throw;
             }
-          
+
 
             //while (true)
             //{

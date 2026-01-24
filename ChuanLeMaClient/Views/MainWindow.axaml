@@ -75,9 +75,11 @@
 								 Content="{Binding LoginButtonContent}"		  HorizontalAlignment="Left" ></atom:Button>
 				</atom:Col>
 				<atom:Col Margin="15,0,0,0">
-					<atom:Button ButtonType="Default"    Icon="{antdicons:AntDesignIconProvider Kind=BookFilled}"
-								 Command="{Binding OpenTaskWindow}"
-								 HorizontalAlignment="Left" >任务</atom:Button>
+					<atom:CountBadge Count="{Binding DoingTaskCount}">
+						<atom:Button ButtonType="Default"    Icon="{antdicons:AntDesignIconProvider Kind=BookFilled}"
+									 Command="{Binding OpenTaskWindow}"
+									 HorizontalAlignment="Left" >任务</atom:Button>
+					</atom:CountBadge>
 				</atom:Col>
 				<atom:Col Margin="15,0,0,0">
 					<atom:Button ButtonType="Default"    Icon="{antdicons:AntDesignIconProvider Kind=SettingFilled}"
@@ -100,7 +102,7 @@
 				<Grid  Grid.Column="0"  >
 					<Grid.RowDefinitions>
 						<RowDefinition Height="Auto"/>
-						<RowDefinition Height="*"/> 
+						<RowDefinition Height="*"/>
 
 					</Grid.RowDefinitions>
 					<Grid Grid.Row="0" ColumnSpacing="12">
@@ -123,7 +125,7 @@
 								   ItemsSource="{Binding LocalFolderDataList}"
 								   HorizontalScrollBarVisibility="Visible"
 								   ColumnHeaderHeight="50"
-							       CanUserSortColumns="True"
+								   CanUserSortColumns="True"
 								   CanUserResizeColumns="True"
 								   CanUserFilterColumns="True"
 								   Grid.Row="1"
@@ -204,8 +206,8 @@
 								</atom:DataGridTemplateColumn.CellTemplate>
 							</atom:DataGridTemplateColumn>
 						</atom:DataGrid.Columns>
-					</atom:DataGrid> 
-				 
+					</atom:DataGrid>
+
 				</Grid>
 				<!--
 

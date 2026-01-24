@@ -93,7 +93,9 @@ namespace ChuanLeMaClient.Services.Implement
                 // ReportProgress(fileStream.Position, response.Content.Headers.ContentLength);
             }
             //发送下载完成消息
-            WeakReferenceMessenger.Default.Send(new DownloadCompletedMessage(taskid, localfilepath, remotefilepath), "downloadmsg");
+            taskModel.Status = "已完成";
+            await _fileService.UpdateTaskModelAsync(taskModel);
+            WeakReferenceMessenger.Default.Send(new DownloadCompletedMessage(taskid, localfilepath, remotefilepath), "downloadmsg"); 
             //while (true)
             //{
             //    // 模拟上传过程

@@ -17,7 +17,7 @@ namespace ChuanLeMaClient.Views
             InitializeComponent();
 
         }
-        private void MainWindow_OnAttachedToVisualTree(object? sender, RoutedEventArgs e)
+        private async  void MainWindow_OnAttachedToVisualTree(object? sender, RoutedEventArgs e)
         {
             if (DataContext is MainWindowViewModel vm)
             {
@@ -26,7 +26,7 @@ namespace ChuanLeMaClient.Views
                     MaxItems = 3,
                     Position = AtomUI.Desktop.Controls.NotificationPosition.TopRight
                 };
-                vm.SetNotificationManager(_notificationManager);
+               await  vm.SetNotificationManager(_notificationManager);
                 AtomUI.Desktop.Controls.WindowMessageManager message = new AtomUI.Desktop.Controls.WindowMessageManager(this)
                 {
                     MaxItems = 3,

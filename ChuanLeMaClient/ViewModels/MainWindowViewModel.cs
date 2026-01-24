@@ -93,12 +93,18 @@ namespace ChuanLeMaClient.ViewModels
             }
         }
         /// <summary>
+        /// 正在进行的任务数量
+        /// </summary>
+        [ObservableProperty]
+        public int doingTaskCount;
+        /// <summary>
         /// 由窗口调用 传入通知管理器
         /// </summary>
         /// <param name="manager"></param>
-        public void SetNotificationManager(WindowNotificationManager manager)
+        public async Task SetNotificationManager(WindowNotificationManager manager)
         {
             _basicManager = manager;
+            this.DoingTaskCount = await _fileservice.GetDoingTaskCount();
             //List<FolderFileDataModel> items =
             //   [
             //       new FolderFileDataModel
@@ -162,6 +168,17 @@ namespace ChuanLeMaClient.ViewModels
                 {
                     //下载完成后，刷新本地文件列表
                     this.LoadLocalFolderFiles();
+                    this.DoingTaskCount = await _fileservice.GetDoingTaskCount();
+                });
+
+            });
+            Messenger.Register<MainWindowViewModel, UploadCompletedMessage, string>(this, "uploadmsg", (r, m) =>
+            {
+                Dispatcher.UIThread.Post(async () =>
+                {
+                    //刷新远程文件列表
+                    await this.LoadRemoteFolderDataList();
+                    this.DoingTaskCount = await _fileservice.GetDoingTaskCount();
                 });
 
             });
@@ -237,13 +254,14 @@ namespace ChuanLeMaClient.ViewModels
         }
 
         [RelayCommand]
-        public void UploadLink(FolderFileDataModel info)
+        public async Task UploadLink(FolderFileDataModel info)
         {
             //_basicManager?.Show(new Notification(
             //    "温馨提示",
             //    $"上传成功!{info.Name}"
             //));
             _uploadService?.AddTask(info, System.IO.Path.Combine(LocalWorkPath, info.Name), RemoteWorkPath, "token");
+            this.DoingTaskCount = await _fileservice.GetDoingTaskCount();
         }
         [RelayCommand]
         public async Task DeleteLink(FolderFileDataModel info)
@@ -308,14 +326,14 @@ namespace ChuanLeMaClient.ViewModels
 
         }
         [RelayCommand]
-        public void DownloadLink(FolderFileDataModel info)
+        public async Task DownloadLink(FolderFileDataModel info)
         {
             //_basicManager?.Show(new Notification(
             //    "温馨提示",
             //    $"上传成功!{info.Name}"
             //));
             _downloadService?.AddTask(info, System.IO.Path.Combine(LocalWorkPath, info.Name), RemoteWorkPath + info.Name, "token");
-
+            this.DoingTaskCount = await _fileservice.GetDoingTaskCount();
         }
         /// <summary>
         /// 打开文件夹选择对话框
@@ -426,9 +444,7 @@ namespace ChuanLeMaClient.ViewModels
             LoginButtonContent = "已登录";
             try
             {
-                ResponseResult<List<FolderFileDataModel>> res = await _fileservice.FileDirList(this.RemoteWorkPath);
-                this.RemoteFolderDataList.Clear();
-                this.RemoteFolderDataList.AddRange(res.data);
+                await LoadRemoteFolderDataList();
             }
             catch (Exception ex)
             {
@@ -439,6 +455,12 @@ namespace ChuanLeMaClient.ViewModels
                               ));
             }
 
+        }
+        private async Task LoadRemoteFolderDataList()
+        {
+            ResponseResult<List<FolderFileDataModel>> res = await _fileservice.FileDirList(this.RemoteWorkPath);
+            this.RemoteFolderDataList.Clear();
+            this.RemoteFolderDataList.AddRange(res.data);
         }
         [RelayCommand]
         public async void OpenTaskWindow()
