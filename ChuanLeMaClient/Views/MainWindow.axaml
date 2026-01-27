@@ -60,13 +60,13 @@
 				<atom:Col>
 					<StackPanel Orientation="Horizontal" HorizontalAlignment="Stretch" Spacing="10" Margin="15,0,0,0">
 						<Label Content="账号" VerticalAlignment="Center"/>
-						<atom:LineEdit Watermark="请输入账号" HorizontalAlignment="Stretch" Width="150"/>
+						<atom:LineEdit Watermark="请输入账号" Text="{Binding UserName}" HorizontalAlignment="Stretch" Width="150"/>
 					</StackPanel>
 				</atom:Col>
 				<atom:Col>
 					<StackPanel Orientation="Horizontal" HorizontalAlignment="Stretch" Spacing="10" Margin="15,0,0,0">
 						<Label Content="密码" VerticalAlignment="Center"/>
-						<atom:LineEdit Watermark="请输入密码"  PasswordChar="*" HorizontalAlignment="Stretch" Width="150"/>
+						<atom:LineEdit Watermark="请输入密码"  Text="{Binding Password}"  PasswordChar="*" HorizontalAlignment="Stretch" Width="150"/>
 					</StackPanel>
 				</atom:Col>
 				<atom:Col Margin="15,0,0,0">

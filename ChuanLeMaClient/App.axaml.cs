@@ -147,6 +147,9 @@ namespace ChuanLeMaClient
             builder.RegisterType<DownloadServiceImplSingleInstance>()
                 .As<Services.Inteface.IDownloadService>()
                 .SingleInstance();
+            builder.RegisterType<ApplicationGlobalVarServiceImplSingleInstance>()//应用程序全局变量服务单例
+                .As<Services.Inteface.IApplicationGlobalVarService>()
+                .SingleInstance();
             builder.RegisterType<SQLiteHelper>().AsSelf().SingleInstance();//注册数据库操作类 单例
             #region 注册IConfiguartion
             var env = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT")

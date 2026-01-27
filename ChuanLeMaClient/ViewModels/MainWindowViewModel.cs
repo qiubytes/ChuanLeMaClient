@@ -52,6 +52,8 @@ namespace ChuanLeMaClient.ViewModels
         private IConfiguration _configuration;
         private IFileService _fileservice;
         private ILogger<MainWindowViewModel> _logger;
+        private IUserService _userService;
+        private IApplicationGlobalVarService _applicationGlobalVarService;
         /// <summary>
         /// 本地文件目录列表
         /// </summary>
@@ -76,6 +78,16 @@ namespace ChuanLeMaClient.ViewModels
         [ObservableProperty]
 
         public bool isDeleteConfirmMsgBoxOpened = false;
+        /// <summary>
+        /// 登录用户名
+        /// </summary>
+        [ObservableProperty]
+        public string userName;
+        /// <summary>
+        ///登录密码
+        /// </summary>
+        [ObservableProperty]
+        public string password;
         /// <summary>
         /// 登录按钮内容
         /// </summary>
@@ -195,7 +207,9 @@ namespace ChuanLeMaClient.ViewModels
             IDownloadService downloadService,
             IConfiguration configuration,
             IFileService fileService,
-            ILogger<MainWindowViewModel> logger
+            ILogger<MainWindowViewModel> logger,
+            IUserService userService,
+            IApplicationGlobalVarService applicationGlobalVarService
             )
         {
             _testService = testService;
@@ -206,6 +220,8 @@ namespace ChuanLeMaClient.ViewModels
             _configuration = configuration;
             _fileservice = fileService;
             _logger = logger;
+            _userService = userService;
+            _applicationGlobalVarService = applicationGlobalVarService;
             // 激活消息接收
             IsActive = true;
             // 延迟到UI线程空闲时初始化
@@ -428,19 +444,29 @@ namespace ChuanLeMaClient.ViewModels
             }
         }
         [RelayCommand]
-        public async void Login()
+        public async Task Login()
         {
             //_basicManager?.Show(new Notification(
             //    "温馨提示",
             //    $"登录失败,账号或密码错误！"
             //));
-            _testService.Hello();
-            _messageManager?.Show(new AtomUI.Desktop.Controls.Message(
-                                    type: MessageType.Loading,
-                                    content: "登录中...",
-                                    expiration: TimeSpan.FromSeconds(1)
-                                ));
-            //string ServerUrl = _configuration["ServerUrl"];
+            //_testService.Hello();
+            //_messageManager?.Show(new AtomUI.Desktop.Controls.Message(
+            //                        type: MessageType.Loading,
+            //                        content: "登录中...",
+            //                        expiration: TimeSpan.FromSeconds(1)
+            //                    ));
+            ResponseResult<string> loginres = await _userService.Login(new Dtos.User.UserLoginRequestDto(UserName, Password));
+            if (loginres.code != 200 || string.IsNullOrEmpty(loginres.data))
+            {
+                _messageManager?.Show(new AtomUI.Desktop.Controls.Message(
+                                 type: MessageType.Error,
+                                 content: loginres.msg,
+                                 expiration: TimeSpan.FromSeconds(2)
+                             ));
+                return;
+            }
+            _applicationGlobalVarService.UserToken = loginres.data;
             LoginButtonContent = "已登录";
             try
             {
