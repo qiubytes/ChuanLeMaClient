@@ -15,10 +15,12 @@ namespace ChuanLeMaClient.Services.Implement
     {
         private readonly IConfiguration _configuration;
         private readonly IApplicationGlobalVarService _applicationGlobalVarService;
-        public UserServiceImpl(IConfiguration configuration, IApplicationGlobalVarService applicationGlobalVarService)
+        private readonly HttpClientUtil _httpClientUtil;
+        public UserServiceImpl(IConfiguration configuration, IApplicationGlobalVarService applicationGlobalVarService, HttpClientUtil httpClientUtil)
         {
             _configuration = configuration;
             _applicationGlobalVarService = applicationGlobalVarService;
+            _httpClientUtil = httpClientUtil;
         }
         /// <summary>
         /// 用户登录
@@ -27,8 +29,8 @@ namespace ChuanLeMaClient.Services.Implement
         /// <returns></returns>
         public async Task<ResponseResult<string>> Login(UserLoginRequestDto requestDto)
         {
-            HttpClientUtil httpClientUtil = new HttpClientUtil(_configuration, _applicationGlobalVarService);
-            ResponseResult<string> res = await httpClientUtil.PostRequest<UserLoginRequestDto, ResponseResult<string>>("/User/Login", requestDto);
+            //HttpClientUtil httpClientUtil = new HttpClientUtil(_configuration, _applicationGlobalVarService);
+            ResponseResult<string> res = await _httpClientUtil.PostRequest<UserLoginRequestDto, ResponseResult<string>>("/User/Login", requestDto);
             return res;
         }
     }

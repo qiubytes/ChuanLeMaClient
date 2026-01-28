@@ -17,16 +17,18 @@ namespace ChuanLeMaClient.Services.Implement
         private readonly IConfiguration _configuration;
         private readonly ITaskModelRepository _taskModelRepository;
         private readonly IApplicationGlobalVarService _applicationGlobalVarService;
-        public FileServiceImpl(IConfiguration configuration, ITaskModelRepository taskModelRepository, IApplicationGlobalVarService applicationGlobalVarService)
+        private readonly HttpClientUtil _httpClientUtil;
+        public FileServiceImpl(IConfiguration configuration, ITaskModelRepository taskModelRepository, IApplicationGlobalVarService applicationGlobalVarService,HttpClientUtil httpClientUtil)
         {
             _configuration = configuration;
             _taskModelRepository = taskModelRepository;
             _applicationGlobalVarService = applicationGlobalVarService;
+            _httpClientUtil = httpClientUtil;
         }
         public async Task<ResponseResult<List<FolderFileDataModel>>> FileDirList(string workpath)
         {
-            HttpClientUtil client = new HttpClientUtil(_configuration, _applicationGlobalVarService);
-            ResponseResult<List<FolderFileDataModel>> res = await client.PostRequest<FileListRequestDto, ResponseResult<List<FolderFileDataModel>>>("/File/FileDirList", new FileListRequestDto() { workpath = workpath });
+            //HttpClientUtil client = new HttpClientUtil(_configuration, _applicationGlobalVarService);
+            ResponseResult<List<FolderFileDataModel>> res = await _httpClientUtil.PostRequest<FileListRequestDto, ResponseResult<List<FolderFileDataModel>>>("/File/FileDirList", new FileListRequestDto() { workpath = workpath });
             return res;
         }
 

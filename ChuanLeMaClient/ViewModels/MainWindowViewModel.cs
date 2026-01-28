@@ -489,7 +489,7 @@ namespace ChuanLeMaClient.ViewModels
             this.RemoteFolderDataList.AddRange(res.data);
         }
         [RelayCommand]
-        public async void OpenTaskWindow()
+        public void OpenTaskWindow()
         {
             if (Avalonia.Application.Current?.ApplicationLifetime is ClassicDesktopStyleApplicationLifetime lifetime)
             {

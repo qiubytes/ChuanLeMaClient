@@ -21,11 +21,13 @@ namespace ChuanLeMaClient.Services.Implement
     {
         private readonly IFileService _fileService;
         private readonly IConfiguration _configuration;
-        public DownloadServiceImplSingleInstance(IFileService fileService, IConfiguration configuration)
+        private readonly IApplicationGlobalVarService _applicationGlobalVarService;
+        public DownloadServiceImplSingleInstance(IFileService fileService, IConfiguration configuration, IApplicationGlobalVarService applicationGlobalVarService)
         {
             IsActive = true;
             _fileService = fileService;
             _configuration = configuration;
+            _applicationGlobalVarService = applicationGlobalVarService;
         }
         public void AddTask(FolderFileDataModel filemodel, string localfilepath, string remotefilepath, string token)
         {
@@ -61,6 +63,8 @@ namespace ChuanLeMaClient.Services.Implement
             {
                 Content = JsonContent.Create(jsonobj)
             };
+            if (!string.IsNullOrEmpty(_applicationGlobalVarService.UserToken))
+                request.Headers.Add("Authorization", _applicationGlobalVarService.UserToken);
 
             using var response = await _httpClient.SendAsync(request, HttpCompletionOption.ResponseHeadersRead);
             response.EnsureSuccessStatusCode();
@@ -94,8 +98,10 @@ namespace ChuanLeMaClient.Services.Implement
             }
             //发送下载完成消息
             taskModel.Status = "已完成";
+            fileStream.Flush();
+            fileStream.Close(); 
             await _fileService.UpdateTaskModelAsync(taskModel);
-            WeakReferenceMessenger.Default.Send(new DownloadCompletedMessage(taskid, localfilepath, remotefilepath), "downloadmsg"); 
+            WeakReferenceMessenger.Default.Send(new DownloadCompletedMessage(taskid, localfilepath, remotefilepath), "downloadmsg");
             //while (true)
             //{
             //    // 模拟上传过程
@@ -108,10 +114,10 @@ namespace ChuanLeMaClient.Services.Implement
             //    break; // 上传完成后跳出循环
             //}
             // 修改3：增强版垃圾回收
-            await Task.Delay(200); // 给系统处理时间
-            GC.Collect(GC.MaxGeneration, GCCollectionMode.Forced, true, true);
-            GC.WaitForPendingFinalizers();
-            GC.Collect(GC.MaxGeneration, GCCollectionMode.Forced, true, true);
+            //await Task.Delay(200); // 给系统处理时间
+            //GC.Collect(GC.MaxGeneration, GCCollectionMode.Forced, true, true);
+            //GC.WaitForPendingFinalizers();
+            //GC.Collect(GC.MaxGeneration, GCCollectionMode.Forced, true, true);
         }
     }
 }

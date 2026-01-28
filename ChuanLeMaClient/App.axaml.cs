@@ -7,6 +7,7 @@ using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Data.Core;
 using Avalonia.Data.Core.Plugins;
 using Avalonia.Markup.Xaml;
+using ChuanLeMaClient.Common;
 using ChuanLeMaClient.Repository;
 using ChuanLeMaClient.Services.Implement;
 using ChuanLeMaClient.ViewModels;
@@ -46,7 +47,7 @@ namespace ChuanLeMaClient
                 builder.UseDesktopColorPicker();
             });
             // 构建 Autofac 容器
-            var builder = new ContainerBuilder(); 
+            var builder = new ContainerBuilder();
             ConfigureContainer(builder);
             _container = builder.Build();
         }
@@ -170,7 +171,8 @@ namespace ChuanLeMaClient
             builder.RegisterType<TaskWindowViewModel>().AsSelf().InstancePerDependency();
             builder.RegisterType<MainWindowViewModel>().AsSelf().InstancePerDependency();
 
-
+            // 注册Http工具类
+            builder.RegisterType<HttpClientUtil>().AsSelf().InstancePerLifetimeScope();
             // 注册其他服务
             //builder.RegisterType<ApiService>().As<IApiService>().SingleInstance();
             //builder.RegisterType<UserService>().As<IUserService>().InstancePerLifetimeScope();

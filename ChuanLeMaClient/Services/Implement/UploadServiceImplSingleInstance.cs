@@ -22,12 +22,14 @@ namespace ChuanLeMaClient.Services.Implement
     {
         private readonly IFileService _fileService;
         private readonly IConfiguration _configuration;
-        public UploadServiceImplSingleInstance(IFileService fileService, IConfiguration configuration)
+        private readonly IApplicationGlobalVarService _applicationGlobalVarService;
+        public UploadServiceImplSingleInstance(IFileService fileService, IConfiguration configuration, IApplicationGlobalVarService applicationGlobalVarService)
         {
             // 激活消息接收
             IsActive = true;
             _fileService = fileService;
             _configuration = configuration;
+            _applicationGlobalVarService = applicationGlobalVarService;
         }
         public void AddTask(FolderFileDataModel filemodel, string localfilepath, string remotefilepath, string token)
         {
@@ -88,6 +90,8 @@ namespace ChuanLeMaClient.Services.Implement
                 {
                     Content = content
                 };
+                if (!string.IsNullOrEmpty(_applicationGlobalVarService.UserToken))
+                    request.Headers.Add("Authorization", _applicationGlobalVarService.UserToken);
 
                 using var response = await _httpClient.SendAsync(request, HttpCompletionOption.ResponseHeadersRead);
                 response.EnsureSuccessStatusCode();
@@ -95,7 +99,7 @@ namespace ChuanLeMaClient.Services.Implement
                 await _fileService.UpdateTaskModelAsync(taskModel);
                 //发送上传完成消息
                 WeakReferenceMessenger.Default.Send(new UploadCompletedMessage(taskid, localfilepath, remotefilepath), "uploadmsg");
-               
+
             }
             catch (Exception ex)
             {
