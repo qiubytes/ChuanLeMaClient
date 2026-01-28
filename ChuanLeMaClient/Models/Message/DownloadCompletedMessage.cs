@@ -4,15 +4,14 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ChuanLeMaClient.Models
+namespace ChuanLeMaClient.Models.Message
 {
     /// <summary>
-    /// 上传进度消息
+    /// 下载完成消息
     /// </summary>
     /// <param name="taskid"></param>
     /// <param name="localfilepath"></param>
     /// <param name="remotefilepath"></param>
-    /// <param name="progress"></param>
-    public record DownloadProgressMessage(string taskid, string localfilepath, string remotefilepath, int progress);
+    public record DownloadCompletedMessage(string taskid, string localfilepath, string remotefilepath); 
 
 }

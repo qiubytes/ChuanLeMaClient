@@ -1,6 +1,7 @@
 ﻿using AtomUI.Icons.IconPark;
 using ChuanLeMaClient.Dtos;
 using ChuanLeMaClient.Models;
+using ChuanLeMaClient.Models.Message;
 using ChuanLeMaClient.Services.Inteface;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Messaging;

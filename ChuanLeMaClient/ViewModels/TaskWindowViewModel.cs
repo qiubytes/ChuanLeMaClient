@@ -1,5 +1,6 @@
 ﻿using Avalonia.Threading;
 using ChuanLeMaClient.Models;
+using ChuanLeMaClient.Models.Message;
 using ChuanLeMaClient.Services.Inteface;
 using CommunityToolkit.Mvvm.ComponentModel;
 using DynamicData;
@@ -63,6 +64,29 @@ namespace ChuanLeMaClient.ViewModels
                 });
 
             });
+            //注册上传状态消息接收
+            Messenger.Register<TaskWindowViewModel, UploadUpdateMessage, string>(this, "uploadmsg", (r, m) =>
+            {
+                Dispatcher.UIThread.Post(async () =>
+                {
+                    var task = UploadTasks.FirstOrDefault(t => t.TaskId == m.taskid);
+                    if (task != null)
+                    {
+                        task.Status = m.Status; 
+                    }
+                    else
+                    {
+                        await LoadedAsync();
+                        task = UploadTasks.FirstOrDefault(t => t.TaskId == m.taskid);
+                        if (task != null)
+                        {
+                            task.Status = m.Status;
+                        }
+                    }
+                });
+
+            });
+            //注册下载进度消息接收
 
             Messenger.Register<TaskWindowViewModel, DownloadProgressMessage, string>(this, "downloadmsg", (r, m) =>
             {

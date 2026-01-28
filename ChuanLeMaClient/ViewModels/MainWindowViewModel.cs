@@ -7,6 +7,7 @@ using Avalonia.Platform.Storage;
 using Avalonia.Threading;
 using ChuanLeMaClient.Dtos;
 using ChuanLeMaClient.Models;
+using ChuanLeMaClient.Models.Message;
 using ChuanLeMaClient.Services.Implement;
 using ChuanLeMaClient.Services.Inteface;
 using CommunityToolkit.Mvvm.ComponentModel;
@@ -191,6 +192,28 @@ namespace ChuanLeMaClient.ViewModels
                     //刷新远程文件列表
                     await this.LoadRemoteFolderDataList();
                     this.DoingTaskCount = await _fileservice.GetDoingTaskCount();
+                });
+
+            });
+            //注册上传状态消息接收
+            Messenger.Register<MainWindowViewModel, UploadUpdateMessage, string>(this, "uploadmsg", (r, m) =>
+            {
+                Dispatcher.UIThread.Post(async () =>
+                {
+                    this.DoingTaskCount = await _fileservice.GetDoingTaskCount();
+                });
+
+            });
+            Messenger.Register<MainWindowViewModel, NoAuthencatedMessage, string>(this, "common", (r, m) =>
+            {
+                Dispatcher.UIThread.Post(async () =>
+                {
+                    _messageManager.Show(new AtomUI.Desktop.Controls.Message(
+                                   type: MessageType.Error,
+                                   content: "登录状态失效，请重新登录。",
+                                   expiration: TimeSpan.FromSeconds(3)
+                                 ));
+                    this.LoginButtonContent = "登录";
                 });
 
             });
@@ -456,18 +479,39 @@ namespace ChuanLeMaClient.ViewModels
             //                        content: "登录中...",
             //                        expiration: TimeSpan.FromSeconds(1)
             //                    ));
-            ResponseResult<string> loginres = await _userService.Login(new Dtos.User.UserLoginRequestDto(UserName, Password));
-            if (loginres.code != 200 || string.IsNullOrEmpty(loginres.data))
+            try
             {
-                _messageManager?.Show(new AtomUI.Desktop.Controls.Message(
-                                 type: MessageType.Error,
-                                 content: loginres.msg,
-                                 expiration: TimeSpan.FromSeconds(2)
-                             ));
-                return;
+                ResponseResult<string> loginres = await _userService.Login(new Dtos.User.UserLoginRequestDto(UserName, Password));
+                if (loginres.code != 200 || string.IsNullOrEmpty(loginres.data))
+                {
+                    _messageManager?.Show(new AtomUI.Desktop.Controls.Message(
+                                     type: MessageType.Error,
+                                     content: loginres.msg,
+                                     expiration: TimeSpan.FromSeconds(2)
+                                 ));
+                    return;
+                }
+                _applicationGlobalVarService.UserToken = loginres.data;
+                LoginButtonContent = "已登录";
             }
-            _applicationGlobalVarService.UserToken = loginres.data;
-            LoginButtonContent = "已登录";
+            catch (Exception ex)
+            {
+                if (ex.ToString().Contains("由于目标计算机积极拒绝，无法连接"))
+                {
+                    _messageManager?.Show(new AtomUI.Desktop.Controls.Message(
+                                     type: MessageType.Error,
+                                     content: "无法连接到服务器，请检查网络或联系管理员。",
+                                     expiration: TimeSpan.FromSeconds(10)
+                                 ));
+                    return;
+                }
+                _messageManager?.Show(new AtomUI.Desktop.Controls.Message(
+                                    type: MessageType.Error,
+                                    content: ex.ToString(),
+                                    expiration: TimeSpan.FromSeconds(10)
+                                ));
+            } 
+           
             try
             {
                 await LoadRemoteFolderDataList();

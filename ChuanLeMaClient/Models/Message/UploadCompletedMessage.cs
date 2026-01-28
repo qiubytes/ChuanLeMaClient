@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ChuanLeMaClient.Models
+namespace ChuanLeMaClient.Models.Message
 {
     /// <summary>
     /// 上传完成消息

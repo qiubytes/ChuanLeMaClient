@@ -1,5 +1,6 @@
 ﻿using ChuanLeMaClient.Common;
 using ChuanLeMaClient.Models;
+using ChuanLeMaClient.Models.Message;
 using ChuanLeMaClient.Services.Inteface;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Messaging;
@@ -103,6 +104,22 @@ namespace ChuanLeMaClient.Services.Implement
             }
             catch (Exception ex)
             {
+                if (ex is HttpRequestException httpex)
+                {
+                    if (httpex.StatusCode == System.Net.HttpStatusCode.Unauthorized)
+                    {  //发送未授权消息
+                        WeakReferenceMessenger.Default.Send(new NoAuthencatedMessage(), "common");
+                        //更新sqlite 任务状态
+                        TaskModel taskModel = await _fileService.GetModel(taskid);
+                        taskModel.Status = "失败";
+                        await _fileService.UpdateTaskModelAsync(taskModel);
+                        //发送任务消息
+                        WeakReferenceMessenger.Default.Send(new UploadUpdateMessage(taskid, "失败"), "uploadmsg");
+                    }
+                }
+                else
+                {
+                }
 
                 throw;
             }
