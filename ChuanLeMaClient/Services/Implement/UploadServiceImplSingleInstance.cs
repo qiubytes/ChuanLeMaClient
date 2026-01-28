@@ -111,6 +111,7 @@ namespace ChuanLeMaClient.Services.Implement
                         WeakReferenceMessenger.Default.Send(new NoAuthencatedMessage(), "common");
                         //更新sqlite 任务状态
                         TaskModel taskModel = await _fileService.GetModel(taskid);
+                        taskModel.CompletedSize = 0;
                         taskModel.Status = "失败";
                         await _fileService.UpdateTaskModelAsync(taskModel);
                         //发送任务消息
