@@ -36,6 +36,7 @@
 							   HorizontalScrollBarVisibility="Visible"
 							   CanUserResizeColumns="True"
 							   Grid.Row="0"
+
 							   >
 					<atom:DataGrid.Columns>
 						<atom:DataGridTemplateColumn Header="本地名称"  Width="Auto">
@@ -52,11 +53,18 @@
 								</DataTemplate>
 							</atom:DataGridTemplateColumn.CellTemplate>
 						</atom:DataGridTemplateColumn>
+						<atom:DataGridTemplateColumn Header="任务状态"  Width="Auto">
+							<atom:DataGridTemplateColumn.CellTemplate>
+								<DataTemplate>
+									<atom:TextBlock   Text="{Binding Status}"      />
+								</DataTemplate>
+							</atom:DataGridTemplateColumn.CellTemplate>
+						</atom:DataGridTemplateColumn>
 						<atom:DataGridTemplateColumn Header="任务进度"  MinWidth="300">
 							<atom:DataGridTemplateColumn.CellTemplate>
 								<DataTemplate>
 									<!--Stretch 元素拉伸填满父容器的宽度-->
-									<atom:ProgressBar SizeType="Large" Value="{Binding Progress}" Minimum="0"  HorizontalAlignment="Stretch"     />
+									<atom:ProgressBar SizeType="Large"  Value="{Binding Progress}" Minimum="0"  Maximum="100" HorizontalAlignment="Stretch"    />
 								</DataTemplate>
 							</atom:DataGridTemplateColumn.CellTemplate>
 						</atom:DataGridTemplateColumn>
