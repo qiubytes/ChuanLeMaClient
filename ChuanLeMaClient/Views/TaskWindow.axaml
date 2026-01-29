@@ -18,6 +18,7 @@
 	</Design.DataContext>
 	<Window.Resources>
 		<converters:TaskCompletePercentConverter x:Key="TaskCompletePercent"/>
+		<converters:Int64FileSizeConverter x:Key="Int64FileSize"/>
 	</Window.Resources>
 	<atom:TabControl>
 		<atom:TabItem Header="上传任务" Icon="{antdicons:AntDesignIconProvider Kind=CloudUploadOutlined}">
@@ -59,14 +60,14 @@
 						<atom:DataGridTemplateColumn Header="已完成大小" Width="Auto" >
 							<atom:DataGridTemplateColumn.CellTemplate>
 								<DataTemplate>
-									<atom:HyperLinkTextBlock Text="{Binding  CompletedSize}" />
+									<atom:HyperLinkTextBlock Text="{Binding  CompletedSize,Converter={StaticResource Int64FileSize}}" />
 								</DataTemplate>
 							</atom:DataGridTemplateColumn.CellTemplate>
 						</atom:DataGridTemplateColumn>
 						<atom:DataGridTemplateColumn Header="总大小"  Width="Auto" >
 							<atom:DataGridTemplateColumn.CellTemplate>
 								<DataTemplate>
-									<atom:HyperLinkTextBlock Text="{Binding  FileSize}" />
+									<atom:HyperLinkTextBlock Text="{Binding  FileSize,Converter={StaticResource Int64FileSize}}" />
 								</DataTemplate>
 							</atom:DataGridTemplateColumn.CellTemplate>
 						</atom:DataGridTemplateColumn>
@@ -133,14 +134,14 @@
 						<atom:DataGridTemplateColumn Header="已完成大小" Width="Auto" >
 							<atom:DataGridTemplateColumn.CellTemplate>
 								<DataTemplate>
-									<atom:HyperLinkTextBlock Text="{Binding  CompletedSize}" />
+									<atom:HyperLinkTextBlock Text="{Binding  CompletedSize,Converter={StaticResource Int64FileSize}}" />
 								</DataTemplate>
 							</atom:DataGridTemplateColumn.CellTemplate>
 						</atom:DataGridTemplateColumn>
 						<atom:DataGridTemplateColumn Header="总大小"  Width="Auto" >
 							<atom:DataGridTemplateColumn.CellTemplate>
 								<DataTemplate>
-									<atom:HyperLinkTextBlock Text="{Binding  FileSize}" />
+									<atom:HyperLinkTextBlock Text="{Binding  FileSize,Converter={StaticResource Int64FileSize}}" />
 								</DataTemplate>
 							</atom:DataGridTemplateColumn.CellTemplate>
 						</atom:DataGridTemplateColumn>
