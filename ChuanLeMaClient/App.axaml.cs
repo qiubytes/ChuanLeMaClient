@@ -166,7 +166,7 @@ namespace ChuanLeMaClient
 
             // 注册窗口
             builder.RegisterType<MainWindow>().AsSelf().SingleInstance();
-
+            builder.RegisterType<TaskWindow>().AsSelf().InstancePerDependency();
             // 注册 ViewModel
             builder.RegisterType<TaskWindowViewModel>().AsSelf().InstancePerDependency();
             builder.RegisterType<MainWindowViewModel>().AsSelf().InstancePerDependency();
@@ -181,6 +181,8 @@ namespace ChuanLeMaClient
         {
             if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
             {
+                desktop.ShutdownMode = Avalonia.Controls.ShutdownMode.OnLastWindowClose;//最后一个窗口关闭后 就关闭程序
+                
                 // Avoid duplicate validations from both Avalonia and the CommunityToolkit. 
                 // More info: https://docs.avaloniaui.net/docs/guides/development-guides/data-validation#manage-validationplugins
                 DisableAvaloniaDataAnnotationValidation();

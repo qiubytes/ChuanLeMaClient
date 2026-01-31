@@ -16,6 +16,17 @@ namespace ChuanLeMaClient.Repository.Implement
         {
             _sqliteHelper = liteHelper;
         }
+
+        public async Task<int> DeleteTaskModelAsync(string taskId)
+        {
+            string sql = "Delete  FROM TaskModel WHERE TaskId = @TaskId";
+            Microsoft.Data.Sqlite.SqliteParameter[] parameters = new Microsoft.Data.Sqlite.SqliteParameter[]
+            {
+                new Microsoft.Data.Sqlite.SqliteParameter("@TaskId", taskId)
+            };
+            return await _sqliteHelper.ExecuteNonQueryAsync(sql, parameters);
+        }
+
         /// <summary>
         /// 查询所有任务
         /// </summary>

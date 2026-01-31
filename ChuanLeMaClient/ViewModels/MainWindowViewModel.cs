@@ -1,5 +1,6 @@
 ﻿using AtomUI.Desktop.Controls;
 using AtomUI.Icons.IconPark;
+using Autofac;
 using Avalonia.Controls;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Layout;
@@ -38,7 +39,8 @@ namespace ChuanLeMaClient.ViewModels
         /// </summary>
         private WindowMessageManager? _messageManager;
 
-        private TaskWindowViewModel? _taskWindowViewModel;
+        //private TaskWindowViewModel? _taskWindowViewModel;
+        private ILifetimeScope _lifetimeScope;
         /// <summary>
         /// 上传服务
         /// </summary>
@@ -232,12 +234,13 @@ namespace ChuanLeMaClient.ViewModels
             IFileService fileService,
             ILogger<MainWindowViewModel> logger,
             IUserService userService,
-            IApplicationGlobalVarService applicationGlobalVarService
+            IApplicationGlobalVarService applicationGlobalVarService,
+            ILifetimeScope lifetimeScope
             )
         {
             _testService = testService;
             _localFolderFileService = localFolderFileService;
-            _taskWindowViewModel = taskWindowViewModel;
+            //_taskWindowViewModel = taskWindowViewModel;
             _uploadService = uploadService;
             _downloadService = downloadService;
             _configuration = configuration;
@@ -245,6 +248,7 @@ namespace ChuanLeMaClient.ViewModels
             _logger = logger;
             _userService = userService;
             _applicationGlobalVarService = applicationGlobalVarService;
+            _lifetimeScope = lifetimeScope;
             // 激活消息接收
             IsActive = true;
             // 延迟到UI线程空闲时初始化
@@ -510,8 +514,8 @@ namespace ChuanLeMaClient.ViewModels
                                     content: ex.ToString(),
                                     expiration: TimeSpan.FromSeconds(10)
                                 ));
-            } 
-           
+            }
+
             try
             {
                 await LoadRemoteFolderDataList();
@@ -537,13 +541,35 @@ namespace ChuanLeMaClient.ViewModels
         {
             if (Avalonia.Application.Current?.ApplicationLifetime is ClassicDesktopStyleApplicationLifetime lifetime)
             {
-                var taskWindow = new TaskWindow() { DataContext = _taskWindowViewModel };
+                // var taskWindow = new TaskWindow() { DataContext = _taskWindowViewModel };
+
                 //切换主窗口
                 //var oldWindow = lifetime.MainWindow;
                 //lifetime.MainWindow = taskWindow;
                 //taskWindow.Show();
                 //oldWindow.Close();
-                taskWindow.Show();
+                //taskWindow.Show();
+
+                /// 因为窗口关闭后再次尝试显示同一个实例会报错。使用 InstancePerDependency 时，你需要确保每次获取的都是新实例。 是解决方案： 使用autofac解析
+
+                TaskWindow taskWindow = _lifetimeScope.Resolve<TaskWindow>();
+                TaskWindowViewModel taskWindowViewModel = _lifetimeScope.Resolve<TaskWindowViewModel>(); 
+                taskWindow.DataContext = taskWindowViewModel;  
+                taskWindow.Show(); 
+                // if (Avalonia.Application.Current?.ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
+                // {
+                //     // 保存当前主窗口的引用（如果需要）
+                //     var oldMainWindow = desktop.MainWindow;
+                //
+                //     // 设置新窗口为主窗口
+                //     desktop.MainWindow = taskWindow;
+                //
+                //     // 关闭旧的主窗口（可选）
+                //     //oldMainWindow?.Close();
+                //
+                //     // 显示新窗口
+                //     taskWindow.Show();
+                // }
             }
         }
 

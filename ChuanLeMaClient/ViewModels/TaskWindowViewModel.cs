@@ -1,8 +1,15 @@
-﻿using Avalonia.Threading;
+﻿using AtomUI.Desktop.Controls;
+using AtomUI.Icons.IconPark;
+using Autofac;
+using Autofac.Core.Lifetime;
+using Avalonia.Controls;
+using Avalonia.Layout;
+using Avalonia.Threading;
 using ChuanLeMaClient.Models;
 using ChuanLeMaClient.Models.Message;
 using ChuanLeMaClient.Services.Inteface;
 using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
 using DynamicData;
 using System;
 using System.Collections.Generic;
@@ -25,6 +32,7 @@ namespace ChuanLeMaClient.ViewModels
         public ObservableCollection<TaskModel> downloadTasks = new();
         [ObservableProperty]
         public int downloadTaskCurrentPage = 2;
+        private ILifetimeScope _lifetimeScope;
         // 自动生成的属性变更回调方法
         partial void OnUploadTaskCurrentPageChanged(int value)
         {
@@ -72,7 +80,7 @@ namespace ChuanLeMaClient.ViewModels
                     var task = UploadTasks.FirstOrDefault(t => t.TaskId == m.taskid);
                     if (task != null)
                     {
-                        task.Status = m.Status; 
+                        task.Status = m.Status;
                     }
                     else
                     {
@@ -128,9 +136,10 @@ namespace ChuanLeMaClient.ViewModels
             UploadTasks = new ObservableCollection<TaskModel>(tasks.Where(t => t.Direction == "上传"));
         }
 
-        public TaskWindowViewModel(IFileService fileService)
+        public TaskWindowViewModel(IFileService fileService, ILifetimeScope lifetimeScope)
         {
             _fileService = fileService;
+            _lifetimeScope = lifetimeScope;
             //接收消息
             IsActive = true;
             //  InitializeAsync();
@@ -150,6 +159,48 @@ namespace ChuanLeMaClient.ViewModels
             //        }
             //    }
             //    );
+        }
+        [RelayCommand]
+        public async Task DeleteUploadTaskModel(TaskModel taskModel)
+        {
+            TaskWindow taskWindow = _lifetimeScope.Resolve<TaskWindow>();
+            var content = () =>
+            {
+                var stackPanel = new StackPanel
+                {
+                    Orientation = Orientation.Vertical,
+                    Spacing = 5
+                };
+                stackPanel.Children.Add(new AtomUI.Desktop.Controls.TextBlock
+                {
+                    Text = $"是否确认删除任务：{taskModel.LocalPath}"
+                });
+                //stackPanel.Children.Add(new AtomUI.Desktop.Controls.TextBlock
+                //{
+                //    Text = "some messages...some messages..."
+                //});
+                return stackPanel;
+            };
+            var options = new MessageBoxOptions()
+            {
+                Title = "任务删除确认",
+                IsDragMovable = true,
+                IsCenterOnStartup = true,
+                Style = MessageBoxStyle.Confirm
+            };
+            //window 应该继承  AtomUI.Desktop.Controls.Window
+            var code = await MessageBox.ShowMessageModalAsync(content(), null, options);
+            if (code is AtomUI.Desktop.Controls.DialogCode re)
+            {
+                if (re == AtomUI.Desktop.Controls.DialogCode.Accepted)
+                {
+                    await _fileService.DeleteTaskModelAsync(taskModel.TaskId);
+                    this.UploadTasks.Remove(taskModel);
+                    return;
+                }
+            }
+
+
         }
     }
 }

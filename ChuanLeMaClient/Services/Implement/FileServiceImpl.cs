@@ -61,5 +61,10 @@ namespace ChuanLeMaClient.Services.Implement
             List<Models.TaskModel> tasks = await _taskModelRepository.GetAllTaskModelsAsync();
             return tasks.Where(t => t.Status == "进行中").Count();
         }
+
+        public async Task<int> DeleteTaskModelAsync(string taskId)
+        {
+            return await _taskModelRepository.DeleteTaskModelAsync(taskId);
+        }
     }
 }

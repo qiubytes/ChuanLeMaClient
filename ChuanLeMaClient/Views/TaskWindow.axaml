@@ -10,6 +10,7 @@
 		x:DataType="vm:TaskWindowViewModel"
 		xmlns:converters="clr-namespace:ChuanLeMaClient.Converters"
 		WindowStartupLocation="CenterScreen"
+		Name="TaskWindowControl"
 		Title="任务列表">
 	<Design.DataContext>
 		<!-- This only sets the DataContext for the previewer in an IDE,
@@ -111,7 +112,11 @@
 												</MultiBinding>
 											</atom:HyperLinkTextBlock.IsVisible>
 										</atom:HyperLinkTextBlock>
-										<atom:HyperLinkTextBlock Text="删除" >
+										<atom:HyperLinkTextBlock Text="删除"
+																 Command="{Binding DataContext.DeleteUploadTaskModelCommand,
+																 ElementName=TaskWindowControl}"
+																 CommandParameter="{Binding}"
+																 >
 											<atom:HyperLinkTextBlock.IsVisible>
 												<MultiBinding Converter="{StaticResource TaskModelOpVisible}">
 													<Binding Path="Status"/>  <!-- 当前行数据 -->

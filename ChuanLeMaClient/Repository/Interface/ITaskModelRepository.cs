@@ -12,5 +12,6 @@ namespace ChuanLeMaClient.Repository.Interface
         public Task<int> InsertTaskModelAsync(Models.TaskModel model);
         public Task<int> UpdateTaskModelAsync(Models.TaskModel model);
         public Task<Models.TaskModel> GetModel(string TaskId);
+        public Task<int> DeleteTaskModelAsync(string taskId);
     }
 }
