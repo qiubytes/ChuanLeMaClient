@@ -20,6 +20,7 @@
 		<converters:TaskCompletePercentConverter x:Key="TaskCompletePercent"/>
 		<converters:Int64FileSizeConverter x:Key="Int64FileSize"/>
 		<converters:LocalFullPathToFileNameConverter x:Key="LocalFullPathToFileName"/>
+		<converters:TaskModelOpVisibleConverter x:Key="TaskModelOpVisible"/>
 	</Window.Resources>
 	<atom:TabControl>
 		<atom:TabItem Header="上传任务" Icon="{antdicons:AntDesignIconProvider Kind=CloudUploadOutlined}">
@@ -86,10 +87,38 @@
 							<atom:DataGridTemplateColumn.CellTemplate>
 								<DataTemplate>
 									<StackPanel Orientation="Horizontal" Spacing="15">
-										<atom:HyperLinkTextBlock Text="开始"  />
-										<atom:HyperLinkTextBlock Text="暂停"  />
-										<atom:HyperLinkTextBlock Text="停止"  />
-										<atom:HyperLinkTextBlock Text="删除" />
+										<atom:HyperLinkTextBlock Text="开始"    >
+											<atom:HyperLinkTextBlock.IsVisible>
+												<MultiBinding Converter="{StaticResource TaskModelOpVisible}">
+													<Binding Path="Status"/>  <!-- 当前行数据 -->
+													<Binding Source="开始"/>  <!-- 操作类型 -->
+												</MultiBinding>
+											</atom:HyperLinkTextBlock.IsVisible>
+										</atom:HyperLinkTextBlock>
+										<atom:HyperLinkTextBlock Text="暂停"  >
+											<atom:HyperLinkTextBlock.IsVisible>
+												<MultiBinding Converter="{StaticResource TaskModelOpVisible}">
+													<Binding Path="Status"/>  <!-- 当前行数据 -->
+													<Binding Source="暂停"/>  <!-- 操作类型 -->
+												</MultiBinding>
+											</atom:HyperLinkTextBlock.IsVisible>
+										</atom:HyperLinkTextBlock>
+										<atom:HyperLinkTextBlock Text="停止"  >
+											<atom:HyperLinkTextBlock.IsVisible>
+												<MultiBinding Converter="{StaticResource TaskModelOpVisible}">
+													<Binding Path="Status"/>  <!-- 当前行数据 -->
+													<Binding Source="停止"/>  <!-- 操作类型 -->
+												</MultiBinding>
+											</atom:HyperLinkTextBlock.IsVisible>
+										</atom:HyperLinkTextBlock>
+										<atom:HyperLinkTextBlock Text="删除" >
+											<atom:HyperLinkTextBlock.IsVisible>
+												<MultiBinding Converter="{StaticResource TaskModelOpVisible}">
+													<Binding Path="Status"/>  <!-- 当前行数据 -->
+													<Binding Source="删除"/>  <!-- 操作类型 -->
+												</MultiBinding>
+											</atom:HyperLinkTextBlock.IsVisible>
+										</atom:HyperLinkTextBlock>
 									</StackPanel>
 								</DataTemplate>
 							</atom:DataGridTemplateColumn.CellTemplate>
